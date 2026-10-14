@@ -1,7 +1,12 @@
 
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import Image from "next/image";
 import { motion, useReducedMotion } from "motion/react";
 import {
@@ -111,42 +116,54 @@ function ServiceCard({ service }: { service: Service }) {
   const [imageFailed, setImageFailed] = useState(false);
 
   return (
-    <article className="group relative flex h-[410px] w-full min-w-0 flex-col overflow-hidden rounded-[22px] border border-white/[0.15] bg-[#0b1025] transition-all duration-300 hover:border-purple-400/60 hover:shadow-[0_16px_40px_rgba(100,55,200,0.15)] sm:h-[420px] xl:h-[410px]">
-      {/* SERVICE IMAGE */}
-      <div className="relative h-[190px] shrink-0 overflow-hidden bg-[#11152c] sm:h-[195px] xl:h-[180px]">
+    <article className="group relative flex h-[420px] w-full min-w-0 flex-col overflow-hidden rounded-[22px] border border-white/[0.15] bg-[#0b1025] transition-all duration-300 hover:border-purple-400/60 hover:shadow-[0_16px_40px_rgba(100,55,200,0.15)]">
+      {/* IMAGE */}
+      <div className="relative h-[190px] shrink-0 overflow-hidden bg-[#11152c]">
         {!imageFailed ? (
           <Image
             src={service.image}
             alt={service.title}
             fill
-            sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 25vw"
+            unoptimized
+            sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 33vw"
             className="object-cover transition-transform duration-700 group-hover:scale-105"
-            onError={() => setImageFailed(true)}
+            onError={() => {
+              console.error(
+                "Service image failed to load:",
+                service.image
+              );
+              setImageFailed(true);
+            }}
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-purple-900/40 via-[#0d1530] to-cyan-950/30">
-            <Icon size={60} className="text-purple-300/50" />
+            <Icon
+              size={60}
+              className="text-purple-300/50"
+            />
           </div>
         )}
 
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#060918]/10 via-transparent to-[#0b1025]" />
 
-        {/* ICON */}
         <div className="absolute left-4 top-4 flex h-11 w-11 items-center justify-center rounded-2xl border border-white/20 bg-[#090d23]/85 backdrop-blur-md">
-          <Icon size={21} style={{ color: service.color }} />
+          <Icon
+            size={21}
+            style={{ color: service.color }}
+          />
         </div>
 
-        {/* NUMBER */}
         <span className="absolute right-4 top-4 rounded-full border border-white/15 bg-[#070b1d]/85 px-3 py-2 text-[11px] font-semibold tracking-wider text-white/80 backdrop-blur-md">
           {service.number} / 09
         </span>
 
-        {/* CATEGORY */}
         <div className="absolute bottom-4 left-4">
           <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-[#080c20]/85 px-3 py-2 text-[10px] font-semibold tracking-[0.12em] text-white/85 backdrop-blur-md">
             <span
               className="h-1.5 w-1.5 rounded-full"
-              style={{ backgroundColor: service.color }}
+              style={{
+                backgroundColor: service.color,
+              }}
             />
             {service.category}
           </span>
@@ -207,29 +224,42 @@ export default function Services() {
     };
 
     updateCount();
+
     window.addEventListener("resize", updateCount);
 
-    return () => window.removeEventListener("resize", updateCount);
+    return () => {
+      window.removeEventListener("resize", updateCount);
+    };
   }, []);
 
-  // SCROLL TO CARD
+  // SCROLL TO SERVICE
   const scrollToIndex = useCallback(
-    (index: number) => {
+    (index: number, instant = false) => {
       const slider = sliderRef.current;
       if (!slider) return;
 
-      const safeIndex = Math.max(0, Math.min(index, maxIndex));
-      const firstCard = slider.firstElementChild as HTMLElement | null;
+      const safeIndex = Math.max(
+        0,
+        Math.min(index, maxIndex)
+      );
+
+      const firstCard =
+        slider.firstElementChild as HTMLElement | null;
 
       if (!firstCard) return;
 
       const styles = window.getComputedStyle(slider);
-      const gap = parseFloat(styles.columnGap || styles.gap) || 0;
-      const cardWidth = firstCard.getBoundingClientRect().width;
+
+      const gap =
+        parseFloat(styles.columnGap || styles.gap) || 0;
+
+      const cardWidth =
+        firstCard.getBoundingClientRect().width;
 
       slider.scrollTo({
         left: safeIndex * (cardWidth + gap),
-        behavior: reduceMotion ? "instant" : "smooth",
+        behavior:
+          instant || reduceMotion ? "instant" : "smooth",
       });
 
       setActiveIndex(safeIndex);
@@ -238,11 +268,15 @@ export default function Services() {
   );
 
   const handleNext = useCallback(() => {
-    scrollToIndex(activeIndex >= maxIndex ? 0 : activeIndex + 1);
+    scrollToIndex(
+      activeIndex >= maxIndex ? 0 : activeIndex + 1
+    );
   }, [activeIndex, maxIndex, scrollToIndex]);
 
   const handlePrevious = useCallback(() => {
-    scrollToIndex(activeIndex <= 0 ? maxIndex : activeIndex - 1);
+    scrollToIndex(
+      activeIndex <= 0 ? maxIndex : activeIndex - 1
+    );
   }, [activeIndex, maxIndex, scrollToIndex]);
 
   // AUTOMATIC SLIDER
@@ -253,57 +287,103 @@ export default function Services() {
       const slider = sliderRef.current;
       if (!slider) return;
 
-      const card = slider.firstElementChild as HTMLElement | null;
-      if (!card) return;
+      const firstCard =
+        slider.firstElementChild as HTMLElement | null;
+
+      if (!firstCard) return;
 
       const styles = window.getComputedStyle(slider);
-      const gap = parseFloat(styles.columnGap || styles.gap) || 0;
-      const next = activeIndex >= maxIndex ? 0 : activeIndex + 1;
+
+      const gap =
+        parseFloat(styles.columnGap || styles.gap) || 0;
+
+      const cardWidth =
+        firstCard.getBoundingClientRect().width;
+
+      const currentIndex = Math.max(
+        0,
+        Math.min(
+          Math.round(
+            slider.scrollLeft / (cardWidth + gap)
+          ),
+          maxIndex
+        )
+      );
+
+      const next =
+        currentIndex >= maxIndex ? 0 : currentIndex + 1;
 
       slider.scrollTo({
-        left: next * (card.getBoundingClientRect().width + gap),
+        left: next * (cardWidth + gap),
         behavior: "smooth",
       });
 
       setActiveIndex(next);
     }, 4500);
 
-    return () => window.clearInterval(interval);
-  }, [paused, reduceMotion, maxIndex, activeIndex]);
+    return () => {
+      window.clearInterval(interval);
+    };
+  }, [paused, reduceMotion, maxIndex]);
 
-  // KEEP ALIGNMENT ON RESIZE
+  // KEEP CARDS ALIGNED ON RESIZE
   useEffect(() => {
     const slider = sliderRef.current;
     if (!slider) return;
 
-    const card = slider.firstElementChild as HTMLElement | null;
-    if (!card) return;
+    const observer = new ResizeObserver(() => {
+      const firstCard =
+        slider.firstElementChild as HTMLElement | null;
 
-    const styles = window.getComputedStyle(slider);
-    const gap = parseFloat(styles.columnGap || styles.gap) || 0;
+      if (!firstCard) return;
 
-    slider.scrollTo({
-      left:
-        Math.min(activeIndex, maxIndex) *
-        (card.getBoundingClientRect().width + gap),
-      behavior: "instant",
+      const styles = window.getComputedStyle(slider);
+
+      const gap =
+        parseFloat(styles.columnGap || styles.gap) || 0;
+
+      const cardWidth =
+        firstCard.getBoundingClientRect().width;
+
+      slider.scrollTo({
+        left:
+          Math.min(activeIndex, maxIndex) *
+          (cardWidth + gap),
+        behavior: "instant",
+      });
     });
+
+    observer.observe(slider);
+
+    return () => observer.disconnect();
   }, [visibleCount, maxIndex, activeIndex]);
 
+  // UPDATE ACTIVE INDEX WHEN SWIPING
   const handleScroll = () => {
     const slider = sliderRef.current;
     if (!slider) return;
 
-    const card = slider.firstElementChild as HTMLElement | null;
+    const card =
+      slider.firstElementChild as HTMLElement | null;
+
     if (!card) return;
 
     const styles = window.getComputedStyle(slider);
-    const gap = parseFloat(styles.columnGap || styles.gap) || 0;
-    const width = card.getBoundingClientRect().width + gap;
+
+    const gap =
+      parseFloat(styles.columnGap || styles.gap) || 0;
+
+    const width =
+      card.getBoundingClientRect().width + gap;
 
     if (width > 0) {
-      const index = Math.round(slider.scrollLeft / width);
-      setActiveIndex(Math.max(0, Math.min(index, maxIndex)));
+      const index = Math.round(
+        slider.scrollLeft / width
+      );
+
+      setActiveIndex(
+        Math.max(0, Math.min(index, maxIndex))
+      );
     }
   };
 
@@ -325,14 +405,21 @@ export default function Services() {
             Our Expertise
           </span>
 
-          <Sparkles size={16} className="text-purple-400" />
+          <Sparkles
+            size={16}
+            className="text-purple-400"
+          />
         </div>
 
-        {/* RESPONSIVE LAYOUT */}
+        {/* MAIN LAYOUT */}
         <div className="grid min-w-0 grid-cols-1 items-start gap-10 lg:grid-cols-[minmax(290px,0.32fr)_minmax(0,0.68fr)] lg:gap-7 xl:grid-cols-[minmax(340px,0.30fr)_minmax(0,0.70fr)] xl:gap-9">
-          {/* LEFT TEXT */}
+          {/* LEFT CONTENT */}
           <motion.div
-            initial={reduceMotion ? false : { opacity: 0, y: 18 }}
+            initial={
+              reduceMotion
+                ? false
+                : { opacity: 0, y: 18 }
+            }
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.6 }}
@@ -364,15 +451,22 @@ export default function Services() {
             <div className="mt-7 h-[3px] w-20 rounded-full bg-gradient-to-r from-purple-500 to-cyan-400" />
 
             <p className="mt-7 max-w-[430px] text-[15px] leading-[1.85] text-slate-400">
-              From bold branding to intelligent AI-powered platforms, we
-              combine creativity, technology, and strategy to turn ambitious
-              ideas into powerful digital solutions.
+              From bold branding to intelligent AI-powered
+              platforms, we combine creativity, technology,
+              and strategy to turn ambitious ideas into
+              powerful digital solutions.
             </p>
 
             <motion.a
               href="#contact"
-              whileHover={reduceMotion ? undefined : { y: -3 }}
-              whileTap={reduceMotion ? undefined : { scale: 0.97 }}
+              whileHover={
+                reduceMotion ? undefined : { y: -3 }
+              }
+              whileTap={
+                reduceMotion
+                  ? undefined
+                  : { scale: 0.97 }
+              }
               className="group mt-8 inline-flex min-h-[48px] items-center justify-center gap-7 rounded-full border border-purple-400/50 bg-gradient-to-r from-purple-600/30 to-blue-600/15 px-6 text-[13px] font-semibold text-white transition-all hover:border-purple-300 hover:bg-purple-500/30"
             >
               Start Your Project
@@ -386,7 +480,6 @@ export default function Services() {
 
           {/* RIGHT CAROUSEL */}
           <div className="min-w-0">
-            {/* CAROUSEL HEADER */}
             <div className="mb-5 flex min-h-[44px] items-center justify-between gap-3">
               <div className="flex min-w-0 items-center gap-3">
                 <span className="h-2 w-2 shrink-0 rounded-full bg-purple-400 shadow-[0_0_12px_#a855f7]" />
@@ -417,7 +510,7 @@ export default function Services() {
               </div>
             </div>
 
-            {/* SERVICE CARDS */}
+            {/* CARDS */}
             <div
               ref={sliderRef}
               onScroll={handleScroll}
@@ -451,25 +544,35 @@ export default function Services() {
             {/* PAGINATION */}
             <div className="mt-5 flex items-center justify-between gap-4">
               <div className="flex flex-wrap items-center gap-1.5">
-                {Array.from({ length: maxIndex + 1 }, (_, index) => (
-                  <button
-                    key={index}
-                    type="button"
-                    onClick={() => scrollToIndex(index)}
-                    aria-label={`Go to service ${index + 1}`}
-                    aria-current={activeIndex === index ? "true" : undefined}
-                    className={`h-[4px] rounded-full transition-all duration-300 ${
-                      activeIndex === index
-                        ? "w-9 bg-gradient-to-r from-purple-500 to-cyan-400"
-                        : "w-4 bg-white/20 hover:bg-white/40"
-                    }`}
-                  />
-                ))}
+                {Array.from(
+                  { length: maxIndex + 1 },
+                  (_, index) => (
+                    <button
+                      key={index}
+                      type="button"
+                      onClick={() => scrollToIndex(index)}
+                      aria-label={`Go to service ${index + 1}`}
+                      aria-current={
+                        activeIndex === index
+                          ? "true"
+                          : undefined
+                      }
+                      className={`h-[4px] rounded-full transition-all duration-300 ${
+                        activeIndex === index
+                          ? "w-9 bg-gradient-to-r from-purple-500 to-cyan-400"
+                          : "w-4 bg-white/20 hover:bg-white/40"
+                      }`}
+                    />
+                  )
+                )}
               </div>
 
               <div className="flex shrink-0 items-center gap-2 text-[12px] tracking-wider">
                 <span className="font-semibold text-purple-300">
-                  {String(activeIndex + 1).padStart(2, "0")}
+                  {String(activeIndex + 1).padStart(
+                    2,
+                    "0"
+                  )}
                 </span>
 
                 <span className="text-white/30">/</span>
@@ -481,7 +584,8 @@ export default function Services() {
             </div>
 
             <p className="mt-4 text-[11px] text-white/35">
-              Swipe or use the arrows to explore our expertise.
+              Swipe or use the arrows to explore our
+              expertise.
             </p>
           </div>
         </div>
