@@ -1,77 +1,10 @@
 
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import type { SVGProps } from "react";
+import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { motion, useReducedMotion } from "motion/react";
-
-type SocialName = "linkedin" | "twitter" | "youtube" | "instagram";
-
-function ArrowIcon({ className = "" }: { className?: string }) {
-  return (
-    <svg
-      width="18"
-      height="18"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-      aria-hidden="true"
-    >
-      <path d="M5 12h14" />
-      <path d="m12 5 7 7-7 7" />
-    </svg>
-  );
-}
-
-function SocialIcon({
-  name,
-  ...props
-}: SVGProps<SVGSVGElement> & { name: SocialName }) {
-  const paths = {
-    linkedin: (
-      <>
-        <rect x="2" y="2" width="20" height="20" rx="2" />
-        <path d="M6 10v8M6 6v.1M11 18v-8h4v1.5c.8-1.2 2-1.8 3.3-1.8 2.3 0 3.2 1.5 3.2 4V18" />
-      </>
-    ),
-    twitter: <path d="M4 3h3.7L20 21h-3.7L4 3Zm16 0L4 21" />,
-    youtube: (
-      <>
-        <rect x="2" y="5" width="20" height="14" rx="4" />
-        <path d="m10 9 5 3-5 3V9Z" />
-      </>
-    ),
-    instagram: (
-      <>
-        <rect x="2" y="2" width="20" height="20" rx="6" />
-        <circle cx="12" cy="12" r="4" />
-        <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
-      </>
-    ),
-  };
-
-  return (
-    <svg
-      width="19"
-      height="19"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.7"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-      {...props}
-    >
-      {paths[name]}
-    </svg>
-  );
-}
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 
 const navigation = [
   { name: "Home", href: "#home" },
@@ -82,375 +15,184 @@ const navigation = [
   { name: "Contact", href: "#contact" },
 ];
 
-const socialLinks: {
-  name: string;
-  href: string;
-  icon: SocialName;
-}[] = [
-  {
-    name: "LinkedIn",
-    href: "https://www.linkedin.com/",
-    icon: "linkedin",
-  },
-  {
-    name: "X",
-    href: "https://x.com/",
-    icon: "twitter",
-  },
-  {
-    name: "YouTube",
-    href: "https://www.youtube.com/",
-    icon: "youtube",
-  },
-  {
-    name: "Instagram",
-    href: "https://www.instagram.com/",
-    icon: "instagram",
-  },
-];
-
-const ease = [0.22, 1, 0.36, 1] as const;
-
 export default function Footer() {
-  const videoRef = useRef<HTMLVideoElement>(null);
   const reduceMotion = useReducedMotion();
-  const [videoFailed, setVideoFailed] = useState(false);
-  const [year, setYear] = useState(2026);
-
-  useEffect(() => {
-    setYear(new Date().getFullYear());
-  }, []);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
-
-    video.muted = true;
-    video.defaultMuted = true;
 
     if (reduceMotion) {
       video.pause();
       return;
     }
 
-    const playVideo = () => {
-      if (document.hidden) return;
-
-      void video.play().catch(() => {
-        // Browser may restrict autoplay.
-      });
-    };
-
-    const handleVisibility = () => {
-      if (document.hidden) {
-        video.pause();
-      } else {
-        playVideo();
-      }
-    };
-
-    playVideo();
-
-    document.addEventListener(
-      "visibilitychange",
-      handleVisibility
-    );
-
-    return () => {
-      document.removeEventListener(
-        "visibilitychange",
-        handleVisibility
-      );
-    };
+    video.muted = true;
+    void video.play().catch(() => {});
   }, [reduceMotion]);
 
   return (
-    <footer className="relative w-full overflow-hidden bg-[#020612] text-white">
-      {/* CTA SECTION */}
-      <section
-        aria-labelledby="footer-cta-heading"
-        className="relative isolate overflow-hidden border-t border-[#9564ff]/25 bg-[#020612]"
-      >
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_50%,rgba(56,35,115,0.09),transparent_70%)]"
-        />
+    <footer className="w-full bg-[#030615] text-white">
 
-        <div className="relative mx-auto grid w-full max-w-[1920px] grid-cols-1 items-center gap-7 px-5 py-10 sm:px-8 sm:py-12 lg:min-h-[420px] lg:grid-cols-[minmax(0,1fr)_minmax(0,1.65fr)_minmax(0,0.85fr)] lg:gap-5 lg:px-10 lg:py-8 xl:grid-cols-[minmax(0,1fr)_minmax(0,1.75fr)_minmax(0,0.9fr)] xl:gap-7 xl:px-16 2xl:min-h-[500px]">
-          {/* LEFT TEXT */}
+      {/* VIDEO SECTION - SLIGHTLY INCREASED HEIGHT */}
+      <section
+        aria-labelledby="footer-cta-title"
+        className="relative isolate flex min-h-[480px] flex-col overflow-hidden border-t border-purple-400/20 sm:min-h-[520px] lg:min-h-[610px]"
+      >
+        {/* BACKGROUND VIDEO */}
+        <video
+          ref={videoRef}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          className="absolute inset-0 -z-20 h-full w-full object-cover object-center"
+        >
+          <source
+            src="/videos/xtach-footer-new.mp4"
+            type="video/mp4"
+          />
+        </video>
+
+        {/* LIGHT OVERLAY */}
+        <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-[#030615]/65 via-[#030615]/5 to-[#030615]/65" />
+
+        {/* HEADING */}
+        <div className="relative mx-auto w-full max-w-[1440px] px-5 pt-7 sm:px-10 sm:pt-8 lg:px-16 lg:pt-9 xl:px-20">
           <motion.div
             initial={
               reduceMotion
                 ? false
-                : { opacity: 0, x: -45, y: 10 }
+                : { opacity: 0, y: 12 }
             }
-            whileInView={{ opacity: 1, x: 0, y: 0 }}
-            viewport={{ once: true, amount: 0.25 }}
-            transition={{ duration: 0.85, ease }}
-            className="relative z-10 min-w-0 lg:pr-2"
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="max-w-[650px]"
           >
-            <div className="mb-4 flex items-center gap-3">
-              <span className="h-px w-8 shrink-0 bg-gradient-to-r from-[#b86cff] to-[#4bcaff]" />
+            <div className="mb-2.5 flex items-center gap-2.5">
+              <span className="h-px w-7 bg-cyan-400" />
 
-              <span className="text-[10px] font-semibold uppercase tracking-[0.3em] text-white/75">
-                Let&apos;s Build
+              <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-purple-200 sm:text-[11px]">
+                Let&apos;s Build The Future
               </span>
+
+              <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 shadow-[0_0_9px_#22d3ee]" />
             </div>
 
             <h2
-              id="footer-cta-heading"
-              className="max-w-[490px] text-[clamp(2rem,3vw,3.25rem)] font-semibold leading-[1.1] tracking-[-0.045em] text-white"
+              id="footer-cta-title"
+              className="text-[28px] font-bold leading-[1.13] tracking-[-0.045em] sm:text-[35px] lg:text-[40px]"
             >
-              Something{" "}
-              <span className="bg-gradient-to-r from-white via-[#c7a2ff] to-[#62d4ff] bg-clip-text text-transparent">
-                Extraordinary
-              </span>{" "}
-              Together.
+              Have a Vision?{" "}
+              <span className="bg-gradient-to-r from-[#e2b6ff] via-[#b48cff] to-[#65d7ff] bg-clip-text text-transparent">
+                Let&apos;s Make It Extraordinary.
+              </span>
             </h2>
-
-            <p className="mt-5 max-w-[430px] text-[13px] leading-[1.8] text-white/70 sm:text-[14px]">
-              Have a project in mind? We&apos;d love to hear
-              from you. Let&apos;s transform your ideas into
-              exceptional digital experiences.
-            </p>
-
-            <motion.div
-              aria-hidden="true"
-              className="mt-7 h-px w-24 origin-left bg-gradient-to-r from-[#b86cff]/70 to-transparent"
-              initial={
-                reduceMotion ? false : { scaleX: 0 }
-              }
-              whileInView={{ scaleX: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.9, delay: 0.3 }}
-            />
-          </motion.div>
-
-          {/* CENTER VIDEO */}
-          <motion.div
-            initial={
-              reduceMotion
-                ? false
-                : { opacity: 0, scale: 0.96 }
-            }
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{
-              duration: 1,
-              delay: 0.1,
-              ease,
-            }}
-            className="relative z-0 flex min-w-0 items-center justify-center"
-          >
-            <div className="relative w-full overflow-hidden rounded-xl bg-[#020612]">
-              {!videoFailed ? (
-                <video
-                  ref={videoRef}
-                  autoPlay={!reduceMotion}
-                  muted
-                  loop
-                  playsInline
-                  preload="auto"
-                  aria-label="XTACH digital innovation showcase"
-                  onError={() => setVideoFailed(true)}
-                  className="block h-auto w-full object-contain"
-                >
-                  <source
-                    src="/videos/xtach-footer1.mp4"
-                    type="video/mp4"
-                  />
-                </video>
-              ) : (
-                <div className="flex aspect-video w-full items-center justify-center bg-[radial-gradient(ellipse_at_center,#18265a,#020612)]">
-                  <span className="bg-gradient-to-r from-[#b879ff] to-[#4bcaff] bg-clip-text text-4xl font-bold tracking-[0.2em] text-transparent">
-                    XTACH
-                  </span>
-                </div>
-              )}
-            </div>
-          </motion.div>
-
-          {/* RIGHT BUTTONS */}
-          <motion.div
-            initial={
-              reduceMotion
-                ? false
-                : { opacity: 0, x: 40, y: 10 }
-            }
-            whileInView={{ opacity: 1, x: 0, y: 0 }}
-            viewport={{ once: true, amount: 0.25 }}
-            transition={{
-              duration: 0.85,
-              delay: 0.2,
-              ease,
-            }}
-            className="relative z-10 flex min-w-0 flex-row flex-wrap items-center justify-start gap-3 lg:flex-col lg:items-stretch lg:justify-center xl:gap-4"
-          >
-            <motion.a
-              href="#contact"
-              whileHover={
-                reduceMotion
-                  ? undefined
-                  : {
-                      y: -4,
-                      scale: 1.035,
-                      boxShadow:
-                        "0 12px 35px rgba(174,113,255,0.3)",
-                    }
-              }
-              whileTap={
-                reduceMotion
-                  ? undefined
-                  : { scale: 0.97 }
-              }
-              className="group inline-flex min-h-[48px] items-center justify-center gap-5 whitespace-nowrap rounded-full bg-white px-5 py-3 text-[12px] font-semibold text-[#071024] shadow-[0_8px_30px_rgba(255,255,255,0.12)] transition-colors duration-300 hover:bg-[#eee7ff] sm:text-[13px] lg:w-full"
-            >
-              Get Started
-              <ArrowIcon className="transition-transform duration-300 group-hover:translate-x-1" />
-            </motion.a>
-
-            <motion.a
-              href="#contact"
-              whileHover={
-                reduceMotion
-                  ? undefined
-                  : { y: -4, scale: 1.035 }
-              }
-              whileTap={
-                reduceMotion
-                  ? undefined
-                  : { scale: 0.97 }
-              }
-              className="group inline-flex min-h-[48px] items-center justify-center gap-5 whitespace-nowrap rounded-full border border-white/45 bg-white/[0.035] px-5 py-3 text-[12px] font-medium text-white transition-all duration-300 hover:border-[#bd8aff] hover:bg-[#9c69ff]/15 sm:text-[13px] lg:w-full"
-            >
-              Contact Us
-              <ArrowIcon className="transition-transform duration-300 group-hover:translate-x-1" />
-            </motion.a>
           </motion.div>
         </div>
 
-        <motion.div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#ad72ff] to-transparent"
-          animate={
-            reduceMotion
-              ? undefined
-              : { opacity: [0.35, 1, 0.35] }
-          }
-          transition={{
-            duration: 4,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
+        {/* SPACE RESERVED FOR HANDS AND SPARK */}
+        <div className="min-h-[145px] flex-1" />
+
+        {/* CENTERED BUTTONS */}
+        <div className="relative z-10 mx-auto flex w-full flex-wrap items-center justify-center gap-3 px-5 pb-6 sm:pb-7 lg:pb-8">
+          <motion.a
+            href="#contact"
+            whileHover={
+              reduceMotion
+                ? undefined
+                : { y: -2 }
+            }
+            whileTap={
+              reduceMotion
+                ? undefined
+                : { scale: 0.97 }
+            }
+            className="group inline-flex h-[42px] min-w-[190px] items-center justify-center gap-4 rounded-full bg-gradient-to-r from-[#913cf0] to-[#497cf5] px-5 text-[12px] font-semibold shadow-[0_7px_22px_rgba(130,60,245,0.3)] transition-shadow hover:shadow-[0_9px_26px_rgba(130,60,245,0.5)]"
+          >
+           
+            Start Your Project
+
+            <ArrowUpRight
+              size={15}
+              className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+            />
+          </motion.a>
+
+          <motion.a
+            href="#services"
+            whileHover={
+              reduceMotion
+                ? undefined
+                : { y: -2 }
+            }
+            whileTap={
+              reduceMotion
+                ? undefined
+                : { scale: 0.97 }
+            }
+            className="group inline-flex h-[42px] min-w-[190px] items-center justify-center gap-4 rounded-full border border-white/40 bg-[#090a20]/55 px-5 text-[12px] font-medium backdrop-blur-sm transition-colors hover:bg-white/15"
+          >
+            Explore Our Services
+
+            <ArrowRight
+              size={15}
+              className="transition-transform group-hover:translate-x-1"
+            />
+          </motion.a>
+        </div>
+
+        <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-purple-400/40 to-transparent" />
       </section>
 
       {/* BOTTOM FOOTER */}
-      <div className="relative border-t border-white/10 bg-[#020916]">
-        <div className="mx-auto grid w-full max-w-[1600px] grid-cols-1 gap-8 px-5 py-8 sm:px-8 md:grid-cols-[1fr_auto] md:items-center lg:grid-cols-[1fr_1.5fr_1fr] lg:gap-6 lg:px-12 xl:px-16">
-          {/* XTACH LOGO — MATCHES NAVBAR STYLE */}
-          <div className="flex flex-col items-start">
-            <motion.a
+      <div className="border-t border-white/10 bg-[#030615]">
+        <div className="mx-auto grid max-w-[1440px] grid-cols-1 items-center gap-5 px-5 py-5 sm:px-10 md:grid-cols-[1fr_auto] lg:grid-cols-[1fr_1.5fr_1fr] lg:px-16 xl:px-20">
+
+          {/* SAME LOGO AS NAVBAR */}
+          <div className="flex flex-col items-center md:items-start">
+            <a
               href="#home"
               aria-label="XTACH Home"
-              className="group relative inline-flex flex-col items-start"
-              whileHover={
-                reduceMotion
-                  ? undefined
-                  : { scale: 1.035 }
-              }
-              transition={{ duration: 0.3 }}
+              className="relative block h-[54px] w-[225px] max-w-full"
             >
-              {/* Original XTACH logo */}
-              <div className="relative h-[55px] w-[220px] sm:h-[60px] sm:w-[240px]">
-                <Image
-                  src="/images/xtach-navbar-logo.png"
-                  alt="XTACH — Your Vision, Our Technology"
-                  fill
-                  sizes="(max-width: 640px) 220px, 240px"
-                  className="object-contain object-left"
-                  priority={false}
-                />
-              </div>
+              <Image
+                src="/images/xtach-navbar-logo1.png"
+                alt="XTACH - Redefining The Matrix"
+                fill
+                sizes="225px"
+                className="object-contain object-left"
+              />
+            </a>
 
-              {/* Gradient underline */}
-              <div className="relative mt-1 h-[2px] w-full overflow-hidden bg-white/10">
-                <motion.div
-                  className="absolute inset-y-0 left-0 w-[28%] bg-gradient-to-r from-[#b86cff] via-[#4bcaff] to-[#36baff]"
-                  animate={
-                    reduceMotion
-                      ? undefined
-                      : {
-                          x: ["0%", "250%", "0%"],
-                        }
-                  }
-                  transition={{
-                    duration: 5,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }}
-                />
-              </div>
-            </motion.a>
-
-            
+           
           </div>
 
-          {/* FOOTER NAVIGATION */}
+          {/* NAVIGATION */}
           <nav
             aria-label="Footer navigation"
-            className="flex flex-wrap items-center gap-x-5 gap-y-3 lg:justify-center lg:gap-x-7"
+            className="flex flex-wrap items-center justify-center gap-x-5 gap-y-3"
           >
             {navigation.map((item) => (
               <a
                 key={item.name}
                 href={item.href}
-                className="relative text-[12px] text-white/65 transition-colors duration-300 hover:text-[#c493ff]"
+                className="text-[12px] text-white/60 transition-colors hover:text-purple-300"
               >
                 {item.name}
               </a>
             ))}
           </nav>
 
-          {/* SOCIAL ICONS */}
-          <div className="flex flex-col gap-3 md:items-end">
-            <div className="flex items-center gap-3">
-              {socialLinks.map((social) => (
-                <motion.a
-                  key={social.name}
-                  href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={social.name}
-                  whileHover={
-                    reduceMotion
-                      ? undefined
-                      : { y: -4, scale: 1.1 }
-                  }
-                  whileTap={
-                    reduceMotion
-                      ? undefined
-                      : { scale: 0.95 }
-                  }
-                  className="group flex h-9 w-9 items-center justify-center rounded-full border border-transparent text-white/65 transition-all duration-300 hover:border-[#9c69ff]/40 hover:bg-[#9c69ff]/15 hover:text-[#c18aff]"
-                >
-                  <SocialIcon name={social.icon} />
-                </motion.a>
-              ))}
-            </div>
-
-            <p className="text-[11px] font-medium text-white/50">
-              Build Smarter. Together.
-            </p>
-          </div>
+          {/* TAGLINE */}
+          <p className="text-center text-[11px] tracking-[0.04em] text-white/50 md:text-right">
+            Redefining The Matrix
+          </p>
         </div>
       </div>
-
-      {/* BOTTOM GRADIENT LINE */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[#9b66ff]/45 to-transparent"
-      />
     </footer>
   );
 }

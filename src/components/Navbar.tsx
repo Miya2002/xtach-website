@@ -2,26 +2,52 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { motion, AnimatePresence, useReducedMotion } from "motion/react";
+import { ArrowRight, Menu, X } from "lucide-react";
 import Image from "next/image";
-import { AnimatePresence, motion } from "motion/react";
 
 const navLinks = [
-  { label: "Home", href: "#home" },
-  { label: "About", href: "#about" },
-  { label: "Services", href: "#services" },
-  { label: "Work", href: "#work" },
-  { label: "Blog", href: "#blog" },
-  { label: "Contact", href: "#contact" },
+  { name: "Home", href: "#home" },
+  { name: "About", href: "#about" },
+  { name: "Services", href: "#services" },
+  { name: "Work", href: "#work" },
+  { name: "Blog", href: "#blog" },
+  { name: "Contact", href: "#contact" },
 ];
 
 export default function Navbar() {
-  const [activeLink, setActiveLink] = useState("Home");
   const [menuOpen, setMenuOpen] = useState(false);
+  const [activeLink, setActiveLink] = useState("Home");
   const [scrolled, setScrolled] = useState(false);
+  const reduceMotion = useReducedMotion();
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 24);
+      setScrolled(window.scrollY > 20);
+
+      const sections = navLinks
+        .map((link) => ({
+          name: link.name,
+          element: document.getElementById(link.href.slice(1)),
+        }))
+        .filter(
+          (
+            item
+          ): item is {
+            name: string;
+            element: HTMLElement;
+          } => item.element !== null
+        );
+
+      let current = "Home";
+
+      for (const section of sections) {
+        if (section.element.getBoundingClientRect().top <= 160) {
+          current = section.name;
+        }
+      }
+
+      setActiveLink(current);
     };
 
     handleScroll();
@@ -30,285 +56,258 @@ export default function Navbar() {
       passive: true,
     });
 
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   useEffect(() => {
+    if (!menuOpen) return;
+
     const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setMenuOpen(false);
-      }
+      if (event.key === "Escape") setMenuOpen(false);
     };
 
-    window.addEventListener("keydown", handleEscape);
+    document.addEventListener("keydown", handleEscape);
 
     return () => {
-      window.removeEventListener("keydown", handleEscape);
-    };
-  }, []);
-
-  useEffect(() => {
-    document.body.style.overflow = menuOpen ? "hidden" : "";
-
-    return () => {
-      document.body.style.overflow = "";
+      document.removeEventListener("keydown", handleEscape);
     };
   }, [menuOpen]);
 
-  const handleNavigation = (label: string) => {
-    setActiveLink(label);
+  const closeMenu = (name?: string) => {
     setMenuOpen(false);
+    if (name) setActiveLink(name);
   };
 
   return (
-    <motion.header
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.65, ease: "easeOut" }}
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
+    <header
+      className={`sticky top-0 z-50 w-full max-w-full border-b transition-all duration-500 ${
         scrolled || menuOpen
-          ? "border-b border-white/10 bg-[#050817]/90 shadow-[0_12px_45px_rgba(0,0,0,0.35)] backdrop-blur-2xl"
-          : "border-b border-white/[0.06] bg-[#050817]/25 backdrop-blur-sm"
+          ? "border-white/10 bg-[#050719]/95 shadow-[0_10px_40px_rgba(0,0,0,0.3)] backdrop-blur-2xl"
+          : "border-white/10 bg-[#050719]/90 backdrop-blur-xl"
       }`}
     >
-      {/* Subtle navbar gradient */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute left-0 top-0 h-px w-full bg-gradient-to-r from-transparent via-purple-500/40 to-transparent" />
-        <div className="absolute -top-20 left-[8%] h-32 w-52 rounded-full bg-purple-600/[0.08] blur-3xl" />
-      </div>
+      {/* Top gradient line */}
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-purple-500/60 to-transparent" />
 
-      <nav
-        aria-label="Main navigation"
-        className="relative mx-auto flex h-[76px] w-full max-w-[1440px] items-center justify-between gap-4 px-4 sm:px-7 lg:h-[88px] lg:px-10 xl:px-14"
-      >
-        {/* ================= BRAND LOGO ================= */}
+      <div className="relative mx-auto flex h-[72px] w-full max-w-[1600px] items-center justify-between gap-3 px-4 sm:h-[82px] sm:px-8 lg:h-[100px] lg:px-14 xl:px-20">
+        {/* LOGO */}
         <motion.a
           href="#home"
-          onClick={() => handleNavigation("Home")}
-          whileHover={{ scale: 1.025 }}
-          whileTap={{ scale: 0.98 }}
-          aria-label="XTACH homepage"
-          className="group relative z-50 flex min-w-0 shrink-0 items-center"
+          aria-label="XTACH - Home"
+          onClick={() => closeMenu("Home")}
+          whileHover={reduceMotion ? undefined : { scale: 1.035 }}
+          transition={{ duration: 0.3 }}
+          className="group relative z-10 block w-[160px] shrink-0 sm:w-[195px] lg:w-[225px]"
         >
-          {/* Hover glow behind logo */}
-          <span className="pointer-events-none absolute -inset-3 rounded-2xl bg-gradient-to-r from-purple-600/0 via-purple-500/0 to-cyan-400/0 blur-xl transition-all duration-500 group-hover:from-purple-600/20 group-hover:via-fuchsia-500/15 group-hover:to-cyan-400/15" />
+          <div className="relative">
+            <Image
+              src="/images/xtach-navbar-logo1.png"
+              alt="XTACH - Redefining The Matrix"
+              width={300}
+              height={110}
+              priority
+              className="h-auto w-full object-contain drop-shadow-[0_0_12px_rgba(168,85,247,0.12)] transition-all duration-500 group-hover:drop-shadow-[0_0_18px_rgba(168,85,247,0.5)]"
+            />
 
-          <span className="relative flex flex-col items-start">
-            <span className="relative block h-[38px] w-[152px] sm:h-[44px] sm:w-[177px] xl:h-[48px] xl:w-[194px]">
-              <Image
-                src="/images/xtach-navbar-logo.png"
-                alt="XTACH — Your Vision, Our Technology"
-                fill
-                priority
-                sizes="(max-width: 640px) 152px, (max-width: 1280px) 177px, 194px"
-                className="object-contain object-left drop-shadow-[0_0_9px_rgba(172,105,255,0.20)] transition-all duration-500 group-hover:drop-shadow-[0_0_15px_rgba(179,102,255,0.65)]"
-              />
-            </span>
-
-            {/* Decorative animated line */}
-            <span className="mt-1 flex h-[2px] w-full items-center overflow-hidden rounded-full bg-white/[0.07]">
-              <motion.span
-                className="h-full w-[55%] rounded-full bg-gradient-to-r from-purple-500 via-fuchsia-400 to-cyan-400 shadow-[0_0_12px_rgba(183,100,255,0.75)]"
-                animate={{
-                  x: ["-100%", "190%", "-100%"],
-                }}
+            {/* Animated underline */}
+            <div className="relative mt-1 h-[2px] w-full overflow-hidden rounded-full bg-white/10">
+              <motion.div
+                className="absolute inset-y-0 left-0 w-1/3 rounded-full bg-gradient-to-r from-purple-500 via-fuchsia-400 to-cyan-400"
+                animate={
+                  reduceMotion
+                    ? undefined
+                    : { x: ["0%", "200%", "0%"] }
+                }
                 transition={{
                   duration: 5,
-                  ease: "easeInOut",
                   repeat: Infinity,
+                  ease: "easeInOut",
                 }}
               />
-            </span>
-          </span>
+            </div>
+          </div>
         </motion.a>
 
-        {/* ================= DESKTOP NAV ================= */}
-        <div className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-5 lg:flex xl:gap-8">
+        {/* DESKTOP NAVIGATION */}
+        <nav
+          aria-label="Main navigation"
+          className="hidden items-center gap-7 lg:flex xl:gap-9"
+        >
           {navLinks.map((link) => {
-            const isActive = activeLink === link.label;
+            const isActive = activeLink === link.name;
 
             return (
-              <motion.a
-                key={link.label}
+              <a
+                key={link.name}
                 href={link.href}
-                onClick={() => handleNavigation(link.label)}
-                whileHover={{ y: -2 }}
-                transition={{ duration: 0.2 }}
-                className={`group relative whitespace-nowrap py-3 text-[13px] font-medium transition-colors duration-300 xl:text-[14px] ${
+                onClick={() => setActiveLink(link.name)}
+                aria-current={isActive ? "page" : undefined}
+                className={`group relative py-3 text-[14px] font-medium transition-colors duration-300 xl:text-[15px] ${
                   isActive
                     ? "text-white"
-                    : "text-white/65 hover:text-white"
+                    : "text-white/60 hover:text-white"
                 }`}
               >
-                {link.label}
+                {link.name}
 
-                {isActive ? (
-                  <motion.span
-                    layoutId="xtach-active-navigation"
-                    className="absolute bottom-0 left-0 right-0 h-[2px] rounded-full bg-gradient-to-r from-purple-500 via-fuchsia-400 to-cyan-400 shadow-[0_0_14px_rgba(188,92,255,0.9)]"
-                    transition={{
-                      type: "spring",
-                      stiffness: 350,
-                      damping: 30,
-                    }}
-                  />
-                ) : (
-                  <span className="absolute bottom-0 left-1/2 h-[2px] w-0 -translate-x-1/2 rounded-full bg-gradient-to-r from-purple-500 to-cyan-400 transition-all duration-300 group-hover:w-full" />
-                )}
-              </motion.a>
+                <span
+                  className={`absolute bottom-0 left-0 h-[2px] rounded-full bg-gradient-to-r from-purple-500 to-cyan-400 transition-all duration-300 ${
+                    isActive
+                      ? "w-full opacity-100"
+                      : "w-0 opacity-0 group-hover:w-full group-hover:opacity-100"
+                  }`}
+                />
+              </a>
             );
           })}
-        </div>
+        </nav>
 
-        {/* ================= DESKTOP CTA ================= */}
+        {/* DESKTOP CTA */}
         <motion.a
           href="#contact"
-          onClick={() => handleNavigation("Contact")}
-          whileHover={{
-            scale: 1.04,
-            boxShadow: "0 0 28px rgba(169,91,255,0.3)",
-          }}
-          whileTap={{ scale: 0.97 }}
-          className="group relative hidden shrink-0 items-center gap-4 overflow-hidden rounded-full border border-white/40 bg-white/[0.04] px-5 py-3 text-[13px] font-medium text-white transition-colors duration-300 hover:border-purple-400/70 hover:bg-white/10 lg:inline-flex xl:px-6"
+          whileHover={reduceMotion ? undefined : { scale: 1.04 }}
+          whileTap={reduceMotion ? undefined : { scale: 0.97 }}
+          className="group relative hidden h-[48px] items-center justify-center gap-5 overflow-hidden rounded-full border border-white/35 bg-white/[0.04] px-7 text-[13px] font-medium text-white transition-all duration-300 hover:border-purple-400/70 hover:bg-purple-500/10 lg:inline-flex"
         >
-          <span className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
-
           <span className="relative z-10">Get Started</span>
-
-          <span className="relative z-10 text-lg leading-none transition-transform duration-300 group-hover:translate-x-1">
-            →
-          </span>
+          <ArrowRight
+            size={17}
+            className="relative z-10 transition-transform duration-300 group-hover:translate-x-1"
+          />
         </motion.a>
 
-        {/* ================= MOBILE BUTTON ================= */}
+        {/* MOBILE MENU BUTTON */}
         <button
           type="button"
-          onClick={() => setMenuOpen((previous) => !previous)}
+          onClick={() => setMenuOpen((prev) => !prev)}
           aria-label={menuOpen ? "Close menu" : "Open menu"}
           aria-expanded={menuOpen}
           aria-controls="xtach-mobile-menu"
-          className="relative z-50 flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-white/20 bg-white/[0.06] text-white backdrop-blur-md transition-colors hover:border-purple-400/70 lg:hidden"
+          className="relative z-20 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/20 bg-white/[0.05] text-white transition-all duration-300 hover:border-purple-400/60 hover:bg-purple-500/15 lg:hidden"
         >
-          <span className="relative block h-5 w-5">
-            <motion.span
-              animate={
-                menuOpen
-                  ? { rotate: 45, y: 0 }
-                  : { rotate: 0, y: -6 }
-              }
-              transition={{ duration: 0.25 }}
-              className="absolute left-0 top-[9px] h-[2px] w-5 rounded-full bg-white"
-            />
-
-            <motion.span
-              animate={{ opacity: menuOpen ? 0 : 1 }}
-              transition={{ duration: 0.15 }}
-              className="absolute left-0 top-[9px] h-[2px] w-5 rounded-full bg-white"
-            />
-
-            <motion.span
-              animate={
-                menuOpen
-                  ? { rotate: -45, y: 0 }
-                  : { rotate: 0, y: 6 }
-              }
-              transition={{ duration: 0.25 }}
-              className="absolute left-0 top-[9px] h-[2px] w-5 rounded-full bg-white"
-            />
-          </span>
+          <AnimatePresence mode="wait" initial={false}>
+            {menuOpen ? (
+              <motion.span
+                key="close"
+                initial={{ opacity: 0, rotate: -90 }}
+                animate={{ opacity: 1, rotate: 0 }}
+                exit={{ opacity: 0, rotate: 90 }}
+                transition={{ duration: 0.2 }}
+              >
+                <X size={21} />
+              </motion.span>
+            ) : (
+              <motion.span
+                key="menu"
+                initial={{ opacity: 0, rotate: 90 }}
+                animate={{ opacity: 1, rotate: 0 }}
+                exit={{ opacity: 0, rotate: -90 }}
+                transition={{ duration: 0.2 }}
+              >
+                <Menu size={21} />
+              </motion.span>
+            )}
+          </AnimatePresence>
         </button>
-      </nav>
+      </div>
 
-      {/* ================= MOBILE MENU ================= */}
+      {/* MOBILE NAVIGATION */}
       <AnimatePresence>
         {menuOpen && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.25 }}
-              onClick={() => setMenuOpen(false)}
-              className="fixed inset-x-0 top-[76px] z-30 h-[calc(100dvh-76px)] bg-[#02040c]/75 backdrop-blur-sm lg:hidden"
+          <motion.nav
+            id="xtach-mobile-menu"
+            aria-label="Mobile navigation"
+            initial={
+              reduceMotion
+                ? { opacity: 1 }
+                : { opacity: 0, y: -12, scale: 0.98 }
+            }
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={
+              reduceMotion
+                ? { opacity: 0 }
+                : { opacity: 0, y: -10, scale: 0.98 }
+            }
+            transition={{ duration: 0.25, ease: "easeOut" }}
+            className="absolute left-3 right-3 top-full z-40 mt-2 max-h-[calc(100dvh-95px)] overflow-x-hidden overflow-y-auto rounded-[20px] border border-purple-400/20 bg-[#080a20]/98 p-4 shadow-[0_25px_70px_rgba(0,0,0,0.65)] backdrop-blur-2xl sm:left-6 sm:right-6 sm:p-5 lg:hidden"
+            style={{
+              background:
+                "linear-gradient(145deg, rgba(20,12,47,0.98), rgba(5,9,28,0.99))",
+            }}
+          >
+            {/* Decorative glow */}
+            <div
               aria-hidden="true"
+              className="pointer-events-none absolute -right-20 -top-20 h-48 w-48 rounded-full bg-purple-600/15 blur-[70px]"
             />
 
-            <motion.div
-              id="xtach-mobile-menu"
-              initial={{ opacity: 0, y: -16, scale: 0.98 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -12, scale: 0.98 }}
-              transition={{
-                type: "spring",
-                stiffness: 280,
-                damping: 28,
-              }}
-              className="absolute inset-x-3 top-[80px] z-40 max-h-[calc(100dvh-96px)] overflow-y-auto rounded-[24px] border border-white/15 bg-[#080b21]/95 p-5 shadow-[0_24px_80px_rgba(0,0,0,0.6)] backdrop-blur-2xl sm:inset-x-8 lg:hidden"
-            >
-              <div className="pointer-events-none absolute -right-16 -top-20 h-52 w-52 rounded-full bg-purple-600/20 blur-[65px]" />
-              <div className="pointer-events-none absolute -bottom-20 -left-16 h-44 w-44 rounded-full bg-cyan-500/15 blur-[65px]" />
+            <div className="relative">
+              {/* Menu heading */}
+              <div className="mb-3 flex items-center gap-2 px-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-purple-400 shadow-[0_0_10px_#a855f7]" />
+                <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-purple-300/85">
+                  Explore XTACH
+                </p>
+              </div>
 
-              <div className="relative flex flex-col">
-                <div className="mb-3 border-b border-white/10 px-3 pb-4">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-purple-300/80">
-                    Explore XTACH
-                  </p>
-                </div>
-
+              {/* Navigation links - NO ARROWS */}
+              <div className="border-t border-white/10">
                 {navLinks.map((link, index) => {
-                  const isActive = activeLink === link.label;
+                  const isActive = activeLink === link.name;
 
                   return (
                     <motion.a
-                      key={link.label}
+                      key={link.name}
                       href={link.href}
-                      onClick={() => handleNavigation(link.label)}
-                      initial={{ opacity: 0, x: -14 }}
+                      onClick={() => closeMenu(link.name)}
+                      initial={
+                        reduceMotion
+                          ? false
+                          : { opacity: 0, x: -10 }
+                      }
                       animate={{ opacity: 1, x: 0 }}
                       transition={{
-                        delay: index * 0.055,
-                        duration: 0.3,
+                        duration: 0.25,
+                        delay: reduceMotion ? 0 : index * 0.035,
                       }}
-                      className={`flex items-center justify-between border-b border-white/10 px-3 py-4 text-[16px] font-medium transition-colors ${
+                      className={`relative flex min-h-[48px] w-full items-center border-b border-white/10 px-3 py-2 text-[15px] font-medium transition-all duration-300 ${
                         isActive
-                          ? "text-[#d4a4ff]"
-                          : "text-white/80 hover:text-white"
+                          ? "text-purple-300"
+                          : "text-white/75 hover:bg-white/[0.04] hover:text-white"
                       }`}
                     >
-                      <span>{link.label}</span>
+                      {isActive && (
+                        <span className="absolute bottom-2 left-0 top-2 w-[2px] rounded-full bg-gradient-to-b from-purple-400 to-cyan-400" />
+                      )}
 
-                      <span
-                        className={
-                          isActive
-                            ? "text-purple-400"
-                            : "text-white/30"
-                        }
-                      >
-                        ↗
-                      </span>
+                      {link.name}
                     </motion.a>
                   );
                 })}
-
-                <motion.a
-                  href="#contact"
-                  onClick={() => handleNavigation("Contact")}
-                  whileTap={{ scale: 0.98 }}
-                  className="mt-6 flex items-center justify-center gap-3 rounded-full bg-gradient-to-r from-[#8d43e9] via-[#a855f7] to-[#5475ff] px-6 py-4 text-[15px] font-semibold text-white shadow-[0_8px_30px_rgba(139,92,246,0.35)]"
-                >
-                  Get Started <span>→</span>
-                </motion.a>
-
-                <p className="mt-5 text-center text-[10px] uppercase tracking-[0.26em] text-white/35">
-                  XTACH · Digital Innovation
-                </p>
               </div>
-            </motion.div>
-          </>
+
+              {/* Mobile CTA */}
+              <motion.a
+                href="#contact"
+                onClick={() => closeMenu("Contact")}
+                whileTap={reduceMotion ? undefined : { scale: 0.98 }}
+                className="group mt-5 flex h-[46px] w-full items-center justify-center gap-3 rounded-full bg-gradient-to-r from-[#913cf1] via-[#a34ef5] to-[#4976fa] text-[14px] font-semibold text-white shadow-[0_10px_30px_rgba(124,58,237,0.25)] transition-shadow hover:shadow-[0_10px_35px_rgba(124,58,237,0.45)]"
+              >
+                Get Started
+                <ArrowRight
+                  size={17}
+                  className="transition-transform duration-300 group-hover:translate-x-1"
+                />
+              </motion.a>
+
+              {/* Bottom tagline */}
+              <p className="mt-4 text-center text-[9px] font-medium uppercase tracking-[0.17em] text-white/35">
+                XTACH · Digital Innovation
+              </p>
+            </div>
+          </motion.nav>
         )}
       </AnimatePresence>
-    </motion.header>
+    </header>
   );
 }

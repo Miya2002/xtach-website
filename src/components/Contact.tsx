@@ -272,7 +272,7 @@ export default function Contact() {
           <div className="mt-4 flex items-center gap-2 text-[10px] text-white/55">
             <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 shadow-[0_0_10px_#22d3ee]" />
 
-            <span>Your Vision, Our Technology</span>
+            <span>Redefining The Matrix</span>
 
             <ArrowRight
               size={12}
