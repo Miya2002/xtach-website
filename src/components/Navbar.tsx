@@ -25,21 +25,28 @@ export default function Navbar() {
     };
 
     handleScroll();
+
     window.addEventListener("scroll", handleScroll, {
       passive: true,
     });
 
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setMenuOpen(false);
+      if (event.key === "Escape") {
+        setMenuOpen(false);
+      }
     };
 
     window.addEventListener("keydown", handleEscape);
 
-    return () => window.removeEventListener("keydown", handleEscape);
+    return () => {
+      window.removeEventListener("keydown", handleEscape);
+    };
   }, []);
 
   useEffect(() => {
@@ -57,44 +64,68 @@ export default function Navbar() {
 
   return (
     <motion.header
-      initial={{ opacity: 0, y: -24 }}
+      initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.7, ease: "easeOut" }}
+      transition={{ duration: 0.65, ease: "easeOut" }}
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
         scrolled || menuOpen
-          ? "border-b border-white/10 bg-[#050817]/85 shadow-[0_10px_40px_rgba(0,0,0,0.25)] backdrop-blur-2xl"
-          : "bg-transparent"
+          ? "border-b border-white/10 bg-[#050817]/90 shadow-[0_12px_45px_rgba(0,0,0,0.35)] backdrop-blur-2xl"
+          : "border-b border-white/[0.06] bg-[#050817]/25 backdrop-blur-sm"
       }`}
     >
+      {/* Subtle navbar gradient */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute left-0 top-0 h-px w-full bg-gradient-to-r from-transparent via-purple-500/40 to-transparent" />
+        <div className="absolute -top-20 left-[8%] h-32 w-52 rounded-full bg-purple-600/[0.08] blur-3xl" />
+      </div>
+
       <nav
         aria-label="Main navigation"
-        className="relative mx-auto flex h-[76px] w-full max-w-[1440px] items-center justify-between px-5 sm:px-8 lg:h-[86px] lg:px-12 xl:px-16"
+        className="relative mx-auto flex h-[76px] w-full max-w-[1440px] items-center justify-between gap-4 px-4 sm:px-7 lg:h-[88px] lg:px-10 xl:px-14"
       >
-        {/* LOGO */}
+        {/* ================= BRAND LOGO ================= */}
         <motion.a
           href="#home"
           onClick={() => handleNavigation("Home")}
-          whileHover={{ scale: 1.035 }}
-          whileTap={{ scale: 0.97 }}
-          className="relative z-50 flex shrink-0 items-center gap-3"
+          whileHover={{ scale: 1.025 }}
+          whileTap={{ scale: 0.98 }}
           aria-label="XTACH homepage"
+          className="group relative z-50 flex min-w-0 shrink-0 items-center"
         >
-          {/* <Image
-            src="/images/logo.png"
-            alt="XTACH"
-            width={48}
-            height={48}
-            priority
-            className="h-10 w-10 object-contain sm:h-12 sm:w-12"
-          /> */}
+          {/* Hover glow behind logo */}
+          <span className="pointer-events-none absolute -inset-3 rounded-2xl bg-gradient-to-r from-purple-600/0 via-purple-500/0 to-cyan-400/0 blur-xl transition-all duration-500 group-hover:from-purple-600/20 group-hover:via-fuchsia-500/15 group-hover:to-cyan-400/15" />
 
-          <span className="text-[18px] font-semibold tracking-[0.26em] text-white sm:text-[21px]">
-            XTACH
+          <span className="relative flex flex-col items-start">
+            <span className="relative block h-[38px] w-[152px] sm:h-[44px] sm:w-[177px] xl:h-[48px] xl:w-[194px]">
+              <Image
+                src="/images/xtach-navbar-logo.png"
+                alt="XTACH — Your Vision, Our Technology"
+                fill
+                priority
+                sizes="(max-width: 640px) 152px, (max-width: 1280px) 177px, 194px"
+                className="object-contain object-left drop-shadow-[0_0_9px_rgba(172,105,255,0.20)] transition-all duration-500 group-hover:drop-shadow-[0_0_15px_rgba(179,102,255,0.65)]"
+              />
+            </span>
+
+            {/* Decorative animated line */}
+            <span className="mt-1 flex h-[2px] w-full items-center overflow-hidden rounded-full bg-white/[0.07]">
+              <motion.span
+                className="h-full w-[55%] rounded-full bg-gradient-to-r from-purple-500 via-fuchsia-400 to-cyan-400 shadow-[0_0_12px_rgba(183,100,255,0.75)]"
+                animate={{
+                  x: ["-100%", "190%", "-100%"],
+                }}
+                transition={{
+                  duration: 5,
+                  ease: "easeInOut",
+                  repeat: Infinity,
+                }}
+              />
+            </span>
           </span>
         </motion.a>
 
-        {/* DESKTOP NAVIGATION */}
-        <div className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-6 lg:flex xl:gap-9">
+        {/* ================= DESKTOP NAV ================= */}
+        <div className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-5 lg:flex xl:gap-8">
           {navLinks.map((link) => {
             const isActive = activeLink === link.label;
 
@@ -108,60 +139,57 @@ export default function Navbar() {
                 className={`group relative whitespace-nowrap py-3 text-[13px] font-medium transition-colors duration-300 xl:text-[14px] ${
                   isActive
                     ? "text-white"
-                    : "text-white/70 hover:text-white"
+                    : "text-white/65 hover:text-white"
                 }`}
               >
                 {link.label}
 
-                {isActive && (
+                {isActive ? (
                   <motion.span
-                    layoutId="desktop-active-link"
-                    className="absolute bottom-0 left-0 right-0 h-[2px] rounded-full bg-gradient-to-r from-[#b95cff] via-[#e17bff] to-[#4bbcff] shadow-[0_0_14px_rgba(188,92,255,0.9)]"
+                    layoutId="xtach-active-navigation"
+                    className="absolute bottom-0 left-0 right-0 h-[2px] rounded-full bg-gradient-to-r from-purple-500 via-fuchsia-400 to-cyan-400 shadow-[0_0_14px_rgba(188,92,255,0.9)]"
                     transition={{
                       type: "spring",
                       stiffness: 350,
                       damping: 30,
                     }}
                   />
-                )}
-
-                {!isActive && (
-                  <span className="absolute bottom-0 left-1/2 h-[2px] w-0 -translate-x-1/2 rounded-full bg-[#b95cff] transition-all duration-300 group-hover:w-full" />
+                ) : (
+                  <span className="absolute bottom-0 left-1/2 h-[2px] w-0 -translate-x-1/2 rounded-full bg-gradient-to-r from-purple-500 to-cyan-400 transition-all duration-300 group-hover:w-full" />
                 )}
               </motion.a>
             );
           })}
         </div>
 
-        {/* DESKTOP CTA */}
+        {/* ================= DESKTOP CTA ================= */}
         <motion.a
           href="#contact"
           onClick={() => handleNavigation("Contact")}
           whileHover={{
-            scale: 1.045,
-            boxShadow: "0 0 28px rgba(169, 91, 255, 0.28)",
+            scale: 1.04,
+            boxShadow: "0 0 28px rgba(169,91,255,0.3)",
           }}
           whileTap={{ scale: 0.97 }}
-          className="group relative hidden items-center gap-4 overflow-hidden rounded-full border border-white/65 bg-white/[0.035] px-6 py-2.5 text-[13px] font-medium text-white transition-colors duration-300 hover:border-[#c18aff] hover:bg-white/10 lg:inline-flex"
+          className="group relative hidden shrink-0 items-center gap-4 overflow-hidden rounded-full border border-white/40 bg-white/[0.04] px-5 py-3 text-[13px] font-medium text-white transition-colors duration-300 hover:border-purple-400/70 hover:bg-white/10 lg:inline-flex xl:px-6"
         >
+          <span className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+
           <span className="relative z-10">Get Started</span>
 
-          <motion.span
-            className="relative z-10 text-lg leading-none"
-            whileHover={{ x: 4 }}
-          >
+          <span className="relative z-10 text-lg leading-none transition-transform duration-300 group-hover:translate-x-1">
             →
-          </motion.span>
+          </span>
         </motion.a>
 
-        {/* MOBILE HAMBURGER */}
+        {/* ================= MOBILE BUTTON ================= */}
         <button
           type="button"
           onClick={() => setMenuOpen((previous) => !previous)}
           aria-label={menuOpen ? "Close menu" : "Open menu"}
           aria-expanded={menuOpen}
           aria-controls="xtach-mobile-menu"
-          className="relative z-50 flex h-11 w-11 items-center justify-center rounded-full border border-white/25 bg-white/5 text-white backdrop-blur-md transition-colors hover:border-purple-400 lg:hidden"
+          className="relative z-50 flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-white/20 bg-white/[0.06] text-white backdrop-blur-md transition-colors hover:border-purple-400/70 lg:hidden"
         >
           <span className="relative block h-5 w-5">
             <motion.span
@@ -170,14 +198,14 @@ export default function Navbar() {
                   ? { rotate: 45, y: 0 }
                   : { rotate: 0, y: -6 }
               }
-              className="absolute left-0 top-[9px] h-[2px] w-5 rounded-full bg-white"
               transition={{ duration: 0.25 }}
+              className="absolute left-0 top-[9px] h-[2px] w-5 rounded-full bg-white"
             />
 
             <motion.span
               animate={{ opacity: menuOpen ? 0 : 1 }}
-              className="absolute left-0 top-[9px] h-[2px] w-5 rounded-full bg-white"
               transition={{ duration: 0.15 }}
+              className="absolute left-0 top-[9px] h-[2px] w-5 rounded-full bg-white"
             />
 
             <motion.span
@@ -186,14 +214,14 @@ export default function Navbar() {
                   ? { rotate: -45, y: 0 }
                   : { rotate: 0, y: 6 }
               }
-              className="absolute left-0 top-[9px] h-[2px] w-5 rounded-full bg-white"
               transition={{ duration: 0.25 }}
+              className="absolute left-0 top-[9px] h-[2px] w-5 rounded-full bg-white"
             />
           </span>
         </button>
       </nav>
 
-      {/* MOBILE MENU */}
+      {/* ================= MOBILE MENU ================= */}
       <AnimatePresence>
         {menuOpen && (
           <>
@@ -203,13 +231,13 @@ export default function Navbar() {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.25 }}
               onClick={() => setMenuOpen(false)}
-              className="fixed inset-0 top-[76px] z-30 h-[calc(100dvh-76px)] bg-[#02040c]/75 backdrop-blur-sm lg:hidden"
+              className="fixed inset-x-0 top-[76px] z-30 h-[calc(100dvh-76px)] bg-[#02040c]/75 backdrop-blur-sm lg:hidden"
               aria-hidden="true"
             />
 
             <motion.div
               id="xtach-mobile-menu"
-              initial={{ opacity: 0, y: -18, scale: 0.98 }}
+              initial={{ opacity: 0, y: -16, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -12, scale: 0.98 }}
               transition={{
@@ -223,6 +251,12 @@ export default function Navbar() {
               <div className="pointer-events-none absolute -bottom-20 -left-16 h-44 w-44 rounded-full bg-cyan-500/15 blur-[65px]" />
 
               <div className="relative flex flex-col">
+                <div className="mb-3 border-b border-white/10 px-3 pb-4">
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-purple-300/80">
+                    Explore XTACH
+                  </p>
+                </div>
+
                 {navLinks.map((link, index) => {
                   const isActive = activeLink === link.label;
 
@@ -230,9 +264,7 @@ export default function Navbar() {
                     <motion.a
                       key={link.label}
                       href={link.href}
-                      onClick={() =>
-                        handleNavigation(link.label)
-                      }
+                      onClick={() => handleNavigation(link.label)}
                       initial={{ opacity: 0, x: -14 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{

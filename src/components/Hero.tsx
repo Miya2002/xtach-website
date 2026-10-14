@@ -155,7 +155,7 @@ export default function Hero() {
           "
         >
           <source
-            src="/videos/xtach-hero2.mp4"
+            src="/videos/xtach-hero222.mp4"
             type="video/mp4"
           />
         </video>
@@ -223,7 +223,8 @@ export default function Hero() {
       />
 
       {/* ========================================
-          SOFT PURPLE AMBIENT GLOW
+          SOFT PURPLE AMBIENT G
+          W
       ======================================== */}
 
       <motion.div

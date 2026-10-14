@@ -1,13 +1,20 @@
 
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
-import { motion, useReducedMotion } from "motion/react";
 import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import {
+  motion,
+  useReducedMotion,
+} from "motion/react";
+import {
+  ArrowLeft,
   ArrowRight,
   ArrowUpRight,
-  ArrowLeft,
-  ChevronRight,
   Palette,
   Code2,
   Smartphone,
@@ -18,101 +25,103 @@ import {
   Bot,
   CloudCog,
   Sparkles,
+  MoveUpRight,
 } from "lucide-react";
-
-/* =========================================
-   SERVICES DATA
-========================================= */
 
 const services = [
   {
     number: "01",
     title: "Logo & Brand Design",
-    description: "Memorable identities that make your brand stand out.",
+    description:
+      "Memorable identities that make your brand stand out.",
     icon: Palette,
     image: "/images/services/logo-branding.jfif",
     accent: "#bd78ff",
+    category: "CREATIVE",
   },
   {
     number: "02",
     title: "Website Design & Development",
-    description: "Beautiful, fast and responsive websites built to perform.",
+    description:
+      "Beautiful, fast and responsive websites built to perform.",
     icon: Code2,
     image: "/images/services/web-development.jfif",
     accent: "#38caff",
+    category: "DEVELOPMENT",
   },
   {
     number: "03",
     title: "Application Development",
-    description: "Powerful mobile and web apps for modern businesses.",
+    description:
+      "Powerful mobile and web apps for modern businesses.",
     icon: Smartphone,
     image: "/images/services/app-development.jfif",
     accent: "#aa7cff",
+    category: "DEVELOPMENT",
   },
   {
     number: "04",
     title: "Digital Marketing",
-    description: "Creative, data-driven strategies that accelerate growth.",
+    description:
+      "Creative, data-driven strategies that accelerate growth.",
     icon: ChartNoAxesCombined,
     image: "/images/services/digital-marketing.jfif",
     accent: "#38caff",
+    category: "GROWTH",
   },
   {
     number: "05",
     title: "Portals & CRM Systems",
-    description: "Smart platforms that streamline your business operations.",
+    description:
+      "Smart platforms that streamline your business operations.",
     icon: Database,
     image: "/images/services/crm-portals.jfif",
     accent: "#bd78ff",
+    category: "ENTERPRISE",
   },
   {
     number: "06",
     title: "AI Model Development",
-    description: "Custom AI models designed for intelligent business solutions.",
+    description:
+      "Custom AI models designed for intelligent business solutions.",
     icon: BrainCircuit,
     image: "/images/services/ai-models.jfif",
     accent: "#38caff",
+    category: "ARTIFICIAL INTELLIGENCE",
   },
   {
     number: "07",
     title: "AI Voice Overs",
-    description: "Natural-sounding AI voices for content and communication.",
+    description:
+      "Natural-sounding AI voices for content and communication.",
     icon: Mic2,
     image: "/images/services/ai-voiceovers.jfif",
     accent: "#bd78ff",
+    category: "ARTIFICIAL INTELLIGENCE",
   },
   {
     number: "08",
     title: "AI Automation",
-    description: "Intelligent workflows that save time and boost productivity.",
+    description:
+      "Intelligent workflows that save time and boost productivity.",
     icon: Bot,
     image: "/images/services/ai-automation.jfif",
     accent: "#38caff",
+    category: "AUTOMATION",
   },
   {
     number: "09",
     title: "SaaS Development",
-    description: "Scalable cloud-based software products built for growth.",
+    description:
+      "Scalable cloud-based software products built for growth.",
     icon: CloudCog,
     image: "/images/services/saas-development.jfif",
     accent: "#bd78ff",
+    category: "CLOUD SOLUTIONS",
   },
 ];
 
-const brands = [
-  { name: "Microsoft", symbol: "⊞" },
-  { name: "Google", symbol: "G" },
-  { name: "aws", symbol: "↗" },
-  { name: "Meta", symbol: "∞" },
-  { name: "Adobe", symbol: "▲" },
-  { name: "shopify", symbol: "◈" },
-];
-
-const AUTOPLAY_DELAY = 3500;
-
-/* =========================================
-   SERVICE CARD
-========================================= */
+const AUTOPLAY_DELAY = 4500;
 
 function ServiceCard({
   service,
@@ -128,332 +137,204 @@ function ServiceCard({
   return (
     <motion.a
       href="#contact"
+      data-service-card
+      aria-label={`Explore ${service.title}`}
       initial={
         reduceMotion
           ? false
-          : { opacity: 0, y: 35, scale: 0.96 }
+          : { opacity: 0, y: 45 }
       }
-      whileInView={{
-        opacity: 1,
-        y: 0,
-        scale: 1,
-      }}
-      viewport={{ once: true, amount: 0.1 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.15 }}
       transition={{
-        duration: 0.65,
-        delay: Math.min(index, 4) * 0.07,
+        duration: 0.7,
+        delay: Math.min(index, 3) * 0.07,
         ease: [0.22, 1, 0.36, 1],
       }}
-      whileHover={
-        reduceMotion
-          ? undefined
-          : {
-              y: -8,
-              scale: 1.015,
-            }
-      }
-      className="
-        group relative flex h-[390px]
-        w-full flex-col overflow-hidden
-        rounded-[20px] border
-        border-[#34446b]/70
-        bg-[#071126]
-        transition-[border-color,box-shadow]
-        duration-500
-        hover:border-[#a67cff]/80
-        hover:shadow-[0_20px_55px_rgba(95,65,200,0.3)]
-        sm:h-[410px]
-      "
+      className="group relative flex h-[440px] w-full flex-col overflow-hidden rounded-[26px] border border-white/[0.12] bg-[#0b1025] transition-[border-color,box-shadow] duration-500 hover:border-purple-400/60 hover:shadow-[0_25px_70px_rgba(96,49,200,0.22)] sm:h-[475px]"
     >
-      {/* Ambient hover glow */}
-      <div
-        aria-hidden="true"
-        className="
-          pointer-events-none absolute inset-0 z-10
-          bg-gradient-to-b
-          from-[#a36cff]/10
-          via-transparent
-          to-[#38caff]/10
-          opacity-0 transition-opacity
-          duration-500
-          group-hover:opacity-100
-        "
-      />
+      {/* Animated card border */}
+      <div className="pointer-events-none absolute inset-0 z-30 rounded-[26px] opacity-0 transition-opacity duration-500 group-hover:opacity-100">
+        <div className="absolute inset-0 rounded-[26px] border border-purple-400/40" />
+        <div className="absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-purple-300 to-transparent shadow-[0_0_18px_#b76aff]" />
+      </div>
 
-      {/* Image area */}
-      <div className="relative h-[205px] shrink-0 overflow-hidden sm:h-[220px]">
+      {/* Image */}
+      <div className="relative h-[245px] shrink-0 overflow-hidden sm:h-[265px]">
         {!imageError ? (
           <img
             src={service.image}
             alt={`${service.title} illustration`}
             loading={index < 3 ? "eager" : "lazy"}
             onError={() => setImageError(true)}
-            className="
-              h-full w-full object-cover
-              transition-transform duration-700
-              ease-out group-hover:scale-110
-            "
+            className="h-full w-full object-cover transition-transform duration-[900ms] ease-out group-hover:scale-[1.12]"
           />
         ) : (
-          <div
-            className="
-              flex h-full w-full items-center
-              justify-center bg-gradient-to-br
-              from-[#152755] via-[#24134c]
-              to-[#061329]
-            "
-          >
+          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#19244c] via-[#28144c] to-[#071329]">
             <Icon
-              size={70}
+              size={78}
               strokeWidth={1}
               style={{ color: service.accent }}
             />
           </div>
         )}
 
-        <div
-          className="
-            absolute inset-0
-            bg-gradient-to-t
-            from-[#071126]
-            via-[#071126]/10
-            to-transparent
-          "
-        />
+        {/* Image gradients */}
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0b1025] via-[#0b1025]/10 to-transparent" />
 
-        {/* Floating icon */}
-        <motion.div
-          animate={
-            reduceMotion
-              ? undefined
-              : { y: [0, -5, 0] }
-          }
-          transition={{
-            duration: 4 + (index % 3),
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          className="
-            absolute left-4 top-4
-            flex h-11 w-11 items-center
-            justify-center rounded-full
-            border border-white/25
-            bg-[#030817]/75
-            shadow-[0_0_20px_rgba(120,90,255,0.2)]
-            backdrop-blur-lg
-          "
-        >
+        <div className="pointer-events-none absolute inset-0 bg-purple-500/0 transition-colors duration-700 group-hover:bg-purple-500/[0.07]" />
+
+        {/* Moving light sweep */}
+        <div className="pointer-events-none absolute inset-y-0 -left-[100%] w-1/2 skew-x-[-20deg] bg-gradient-to-r from-transparent via-white/[0.12] to-transparent transition-[left] duration-1000 group-hover:left-[150%]" />
+
+        {/* Icon */}
+        <div className="absolute left-5 top-5 flex h-12 w-12 items-center justify-center rounded-2xl border border-white/20 bg-[#070b1d]/75 shadow-[0_8px_30px_rgba(0,0,0,0.25)] backdrop-blur-xl transition-all duration-500 group-hover:rotate-[-8deg] group-hover:scale-110 group-hover:border-purple-400/60">
           <Icon
-            size={21}
-            strokeWidth={1.8}
+            size={23}
+            strokeWidth={1.7}
             style={{ color: service.accent }}
           />
-        </motion.div>
+        </div>
 
-        <span
-          className="
-            absolute right-4 top-4
-            rounded-full border
-            border-white/15
-            bg-[#030817]/70
-            px-3 py-1 text-[11px]
-            font-medium text-white/70
-            backdrop-blur-md
-          "
-        >
-          {service.number}
+        {/* Number */}
+        <span className="absolute right-5 top-5 rounded-full border border-white/15 bg-[#050817]/70 px-3 py-1.5 text-[11px] font-medium tracking-wider text-white/80 backdrop-blur-xl">
+          {service.number} / 09
         </span>
-      </div>
 
-      {/* Card content */}
-      <div className="relative z-20 flex flex-1 flex-col px-5 pb-4 pt-2">
-        <h3
-          className="
-            text-[16px] font-semibold
-            leading-[1.35]
-            tracking-[-0.025em]
-            text-white
-          "
-        >
-          {service.title}
-        </h3>
-
-        <p
-          className="
-            mt-2 text-[12px]
-            leading-[1.65]
-            text-white/60
-          "
-        >
-          {service.description}
-        </p>
-
-        <div className="mt-auto flex justify-end pt-4">
-          <span
-            className="
-              flex h-9 w-9 items-center
-              justify-center rounded-full
-              border border-white/40
-              bg-white/[0.04]
-              transition-all duration-300
-              group-hover:border-[#b27cff]
-              group-hover:bg-[#9d65f0]
-              group-hover:shadow-[0_0_22px_rgba(170,110,255,0.4)]
-            "
-          >
-            <ArrowUpRight
-              size={17}
-              className="transition-transform duration-300 group-hover:rotate-45"
+        {/* Category */}
+        <div className="absolute bottom-5 left-5">
+          <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-[#080d21]/70 px-3 py-1.5 text-[9px] font-semibold tracking-[0.17em] text-white/80 backdrop-blur-xl">
+            <span
+              className="h-1.5 w-1.5 rounded-full"
+              style={{
+                backgroundColor: service.accent,
+                boxShadow: `0 0 10px ${service.accent}`,
+              }}
             />
+            {service.category}
           </span>
         </div>
       </div>
 
-      {/* Neon bottom line */}
-      <div
-        className="
-          absolute bottom-0 left-0 z-30
-          h-[2px] w-0
-          bg-gradient-to-r
-          from-[#bd6cff] to-[#38caff]
-          transition-all duration-500
-          group-hover:w-full
-        "
-      />
+      {/* Content */}
+      <div className="relative z-10 flex flex-1 flex-col px-5 pb-5 pt-3 sm:px-6">
+        <h3 className="max-w-[95%] text-[19px] font-semibold leading-[1.25] tracking-[-0.035em] text-white transition-colors duration-300 group-hover:text-purple-200 sm:text-[21px]">
+          {service.title}
+        </h3>
+
+        <p className="mt-3 max-w-[95%] text-[13px] leading-[1.7] text-slate-400 sm:text-[14px]">
+          {service.description}
+        </p>
+
+        <div className="mt-auto flex items-center justify-between pt-5">
+          <span className="text-[11px] font-semibold uppercase tracking-[0.16em] text-white/40 transition-colors duration-300 group-hover:text-purple-300">
+            Explore Service
+          </span>
+
+          <span className="flex h-11 w-11 items-center justify-center rounded-full border border-white/25 bg-white/[0.05] text-white transition-all duration-500 group-hover:rotate-45 group-hover:border-purple-400 group-hover:bg-purple-500 group-hover:shadow-[0_0_25px_rgba(170,100,255,0.5)]">
+            <ArrowUpRight size={19} />
+          </span>
+        </div>
+      </div>
+
+      {/* Bottom glow */}
+      <div className="pointer-events-none absolute bottom-0 left-1/2 h-[2px] w-0 -translate-x-1/2 bg-gradient-to-r from-cyan-400 via-purple-400 to-fuchsia-500 transition-all duration-500 group-hover:w-[80%]" />
     </motion.a>
   );
 }
 
-/* =========================================
-   MAIN SERVICES SECTION
-========================================= */
-
 export default function Services() {
   const reduceMotion = useReducedMotion();
-
   const sliderRef = useRef<HTMLDivElement>(null);
-  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const resumeRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const resumeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const [activeIndex, setActiveIndex] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
-  const [isInView, setIsInView] = useState(false);
-  const [isInteracting, setIsInteracting] = useState(false);
+  const [paused, setPaused] = useState(false);
+  const [inView, setInView] = useState(false);
+  const [interacting, setInteracting] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(3);
 
-  const getStep = useCallback(() => {
-    const slider = sliderRef.current;
-    if (!slider) return 0;
-
-    const card = slider.querySelector<HTMLElement>(
-      "[data-service-card]"
-    );
-
-    if (!card) return 0;
-
-    const gap = parseFloat(getComputedStyle(slider).columnGap) || 16;
-
-    return card.getBoundingClientRect().width + gap;
-  }, []);
+  const total = services.length;
+  const maxIndex = Math.max(0, total - visibleCount);
 
   const scrollToIndex = useCallback(
     (index: number, behavior: ScrollBehavior = "smooth") => {
       const slider = sliderRef.current;
       if (!slider) return;
 
-      const normalized =
-        ((index % services.length) + services.length) %
-        services.length;
+      const cards = slider.querySelectorAll<HTMLElement>(
+        "[data-service-card]"
+      );
 
-      const step = getStep();
+      const targetIndex = Math.max(
+        0,
+        Math.min(index, cards.length - 1)
+      );
+
+      const card = cards[targetIndex];
+      if (!card) return;
 
       slider.scrollTo({
-        left: normalized * step,
-        behavior: reduceMotion ? "instant" : behavior,
+        left: card.offsetLeft - slider.offsetLeft,
+        behavior,
       });
 
-      setActiveIndex(normalized);
+      setActiveIndex(targetIndex);
     },
-    [getStep, reduceMotion]
+    []
   );
 
-  const nextSlide = useCallback(() => {
-    const slider = sliderRef.current;
-    if (!slider) return;
-
-    const step = getStep();
-    if (!step) return;
-
-    const current = Math.round(slider.scrollLeft / step);
-
-    if (current >= services.length - 1) {
-      scrollToIndex(0);
-    } else {
-      scrollToIndex(current + 1);
-    }
-  }, [getStep, scrollToIndex]);
-
-  const previousSlide = useCallback(() => {
-    const slider = sliderRef.current;
-    if (!slider) return;
-
-    const step = getStep();
-    if (!step) return;
-
-    const current = Math.round(slider.scrollLeft / step);
-
-    if (current <= 0) {
-      scrollToIndex(services.length - 1);
-    } else {
-      scrollToIndex(current - 1);
-    }
-  }, [getStep, scrollToIndex]);
-
   const pauseTemporarily = useCallback(() => {
-    setIsInteracting(true);
+    setInteracting(true);
 
-    if (resumeRef.current) {
-      clearTimeout(resumeRef.current);
+    if (resumeTimer.current) {
+      clearTimeout(resumeTimer.current);
     }
 
-    resumeRef.current = setTimeout(() => {
-      setIsInteracting(false);
-    }, 5500);
+    resumeTimer.current = setTimeout(() => {
+      setInteracting(false);
+    }, 6500);
   }, []);
 
-  const handleNext = () => {
-    pauseTemporarily();
-    nextSlide();
-  };
+  const next = useCallback(() => {
+    const nextIndex =
+      activeIndex >= maxIndex ? 0 : activeIndex + 1;
 
-  const handlePrevious = () => {
-    pauseTemporarily();
-    previousSlide();
-  };
+    scrollToIndex(nextIndex);
+  }, [activeIndex, maxIndex, scrollToIndex]);
 
-  const handleScroll = useCallback(() => {
-    const slider = sliderRef.current;
-    if (!slider) return;
+  const previous = useCallback(() => {
+    const previousIndex =
+      activeIndex <= 0 ? maxIndex : activeIndex - 1;
 
-    const step = getStep();
-    if (!step) return;
+    scrollToIndex(previousIndex);
+  }, [activeIndex, maxIndex, scrollToIndex]);
 
-    const index = Math.round(slider.scrollLeft / step);
+  useEffect(() => {
+    const updateVisibleCount = () => {
+      const width = window.innerWidth;
 
-    setActiveIndex(
-      Math.max(0, Math.min(services.length - 1, index))
-    );
-  }, [getStep]);
+      const count = width >= 1024 ? 3 : width >= 640 ? 2 : 1;
+      setVisibleCount(count);
+    };
 
-  /* Observe section visibility */
+    updateVisibleCount();
+    window.addEventListener("resize", updateVisibleCount);
+
+    return () => {
+      window.removeEventListener("resize", updateVisibleCount);
+    };
+  }, []);
+
   useEffect(() => {
     const slider = sliderRef.current;
     if (!slider) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        setIsInView(entry.isIntersecting);
+        setInView(entry.isIntersecting);
       },
-      { threshold: 0.2 }
+      { threshold: 0.15 }
     );
 
     observer.observe(slider);
@@ -461,286 +342,177 @@ export default function Services() {
     return () => observer.disconnect();
   }, []);
 
-  /* Autoplay */
   useEffect(() => {
     if (
       reduceMotion ||
-      isPaused ||
-      isInteracting ||
-      !isInView
+      paused ||
+      interacting ||
+      !inView ||
+      maxIndex === 0
     ) {
       return;
     }
 
-    timerRef.current = setInterval(() => {
-      nextSlide();
+    const timer = setInterval(() => {
+      setActiveIndex((current) => {
+        const target = current >= maxIndex ? 0 : current + 1;
+
+        const slider = sliderRef.current;
+        const cards = slider?.querySelectorAll<HTMLElement>(
+          "[data-service-card]"
+        );
+
+        const card = cards?.[target];
+
+        if (slider && card) {
+          slider.scrollTo({
+            left: card.offsetLeft - slider.offsetLeft,
+            behavior: "smooth",
+          });
+        }
+
+        return target;
+      });
     }, AUTOPLAY_DELAY);
 
-    return () => {
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-        timerRef.current = null;
-      }
-    };
+    return () => clearInterval(timer);
   }, [
     reduceMotion,
-    isPaused,
-    isInteracting,
-    isInView,
-    nextSlide,
+    paused,
+    interacting,
+    inView,
+    maxIndex,
   ]);
 
-  /* Cleanup */
+  useEffect(() => {
+    if (activeIndex > maxIndex) {
+      scrollToIndex(maxIndex, "instant");
+    }
+  }, [activeIndex, maxIndex, scrollToIndex]);
+
   useEffect(() => {
     return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
-      if (resumeRef.current) clearTimeout(resumeRef.current);
+      if (resumeTimer.current) {
+        clearTimeout(resumeTimer.current);
+      }
     };
   }, []);
+
+  const handleScroll = () => {
+    const slider = sliderRef.current;
+    if (!slider) return;
+
+    const cards = slider.querySelectorAll<HTMLElement>(
+      "[data-service-card]"
+    );
+
+    let nearestIndex = 0;
+    let nearestDistance = Infinity;
+
+    cards.forEach((card, index) => {
+      const distance = Math.abs(
+        card.offsetLeft - slider.offsetLeft - slider.scrollLeft
+      );
+
+      if (distance < nearestDistance) {
+        nearestDistance = distance;
+        nearestIndex = index;
+      }
+    });
+
+    setActiveIndex(Math.min(nearestIndex, maxIndex));
+  };
 
   return (
     <section
       id="services"
-      className="
-        relative isolate w-full
-        overflow-hidden bg-[#030817]
-        text-white
-      "
+      className="relative isolate overflow-hidden bg-[#050817] py-20 text-white sm:py-24 lg:py-32"
     >
-      {/* Background atmosphere */}
-      <div
-        aria-hidden="true"
-        className="
-          pointer-events-none absolute inset-0 -z-10
-          bg-[radial-gradient(ellipse_at_70%_35%,rgba(55,40,125,0.2),transparent_65%)]
-        "
-      />
-
-      {/* =====================================
-          TRUSTED TECHNOLOGY STRIP
-      ===================================== */}
-
-      <div
-        className="
-          relative overflow-hidden
-          border-y border-[#9870ff]/20
-          bg-[#020614]/95
-        "
-      >
-        <motion.div
-          aria-hidden="true"
-          animate={
-            reduceMotion
-              ? undefined
-              : { x: ["-100%", "100%"] }
-          }
-          transition={{
-            duration: 9,
-            repeat: Infinity,
-            ease: "linear",
-          }}
-          className="
-            pointer-events-none absolute left-0 top-0
-            h-px w-full
-            bg-gradient-to-r
-            from-transparent
-            via-[#a36aff]
-            to-transparent
-          "
-        />
+      {/* Ambient background */}
+      <div className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute -left-40 top-20 h-[500px] w-[500px] rounded-full bg-purple-700/[0.12] blur-[140px]" />
+        <div className="absolute -right-40 bottom-0 h-[500px] w-[500px] rounded-full bg-blue-600/[0.10] blur-[140px]" />
 
         <div
-          className="
-            mx-auto flex max-w-[1600px]
-            flex-col gap-5 px-5 py-5
-            sm:px-8 lg:flex-row
-            lg:items-center lg:gap-8
-            lg:px-12 xl:px-16
-          "
-        >
-          <div className="flex shrink-0 items-center gap-3">
-            <div
-              className="
-                flex h-10 w-10 items-center
-                justify-center rounded-xl
-                border border-[#9b6dff]/35
-                bg-[#9b6dff]/10
-              "
-            >
-              <Sparkles
-                size={19}
-                className="text-[#b77cff]"
-              />
-            </div>
-
-            <div>
-              <p className="text-[9px] font-bold uppercase tracking-[0.22em] text-[#a879ff]">
-                Digital Innovation
-              </p>
-              <p className="mt-1 text-[12px] font-semibold text-white/85">
-                Inspired by Technology
-              </p>
-            </div>
-          </div>
-
-          {/* Moving brand marquee */}
-          <div
-            className="
-              relative min-w-0 flex-1 overflow-hidden
-              [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]
-            "
-          >
-            <motion.div
-              animate={
-                reduceMotion
-                  ? undefined
-                  : { x: ["0%", "-50%"] }
-              }
-              transition={{
-                duration: 25,
-                repeat: Infinity,
-                ease: "linear",
-              }}
-              className="flex w-max items-center gap-10 py-2"
-            >
-              {[...brands, ...brands].map((brand, index) => (
-                <div
-                  key={`${brand.name}-${index}`}
-                  className="
-                    flex shrink-0 items-center gap-2
-                    whitespace-nowrap text-white/55
-                    transition-colors hover:text-white
-                  "
-                >
-                  <span className="text-[22px] font-bold text-[#9b8bc4]">
-                    {brand.symbol}
-                  </span>
-
-                  <span className="text-[18px] font-semibold">
-                    {brand.name}
-                  </span>
-                </div>
-              ))}
-            </motion.div>
-          </div>
-
-          <motion.a
-            href="#contact"
-            whileHover={
-              reduceMotion
-                ? undefined
-                : { scale: 1.04 }
-            }
-            className="
-              group hidden shrink-0
-              items-center gap-4 rounded-full
-              border border-[#aa7cff]/40
-              bg-[#aa7cff]/10 px-5 py-3
-              text-[11px] font-semibold
-              transition-all
-              hover:border-[#aa7cff]
-              hover:bg-[#aa7cff]/20
-              lg:inline-flex
-            "
-          >
-            Let's Build Your Next Project
-            <ArrowRight
-              size={15}
-              className="transition-transform group-hover:translate-x-1"
-            />
-          </motion.a>
-        </div>
+          className="absolute inset-0 opacity-[0.13]"
+          style={{
+            backgroundImage:
+              "linear-gradient(rgba(150,120,255,.15) 1px, transparent 1px), linear-gradient(90deg, rgba(150,120,255,.15) 1px, transparent 1px)",
+            backgroundSize: "75px 75px",
+            maskImage:
+              "linear-gradient(to bottom, transparent, black 25%, black 75%, transparent)",
+          }}
+        />
       </div>
 
-      {/* =====================================
-          MAIN SERVICES CONTENT
-      ===================================== */}
-
-      <div
-        className="
-          mx-auto w-full max-w-[1600px]
-          px-5 py-16 sm:px-8 sm:py-20
-          lg:px-12 lg:py-24 xl:px-16
-        "
-      >
-        <div
-          className="
-            grid grid-cols-1 gap-10
-            lg:grid-cols-[minmax(280px,0.85fr)_minmax(0,2.5fr)]
-            lg:items-center lg:gap-10
-          "
+      <div className="mx-auto w-full max-w-[1500px] px-5 sm:px-8 lg:px-12 xl:px-16">
+        {/* Section top */}
+        <motion.div
+          initial={
+            reduceMotion ? false : { opacity: 0, y: 25 }
+          }
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7 }}
+          className="mb-10 flex items-center gap-3"
         >
-          {/* LEFT CONTENT */}
+          <span className="h-px w-9 bg-gradient-to-r from-purple-500 to-cyan-400" />
+
+          <span className="text-[11px] font-semibold uppercase tracking-[0.28em] text-purple-200">
+            Our Expertise
+          </span>
+
+          <Sparkles
+            size={14}
+            className="text-purple-400"
+          />
+        </motion.div>
+
+        <div className="grid items-start gap-10 lg:grid-cols-[minmax(280px,0.8fr)_minmax(0,2.2fr)] lg:gap-9 xl:gap-14">
+          {/* Left content */}
           <motion.div
             initial={
               reduceMotion
                 ? false
-                : { opacity: 0, x: -40 }
+                : { opacity: 0, x: -35 }
             }
-            whileInView={{
-              opacity: 1,
-              x: 0,
-            }}
-            viewport={{ once: true, amount: 0.2 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
             transition={{
               duration: 0.8,
-              ease: "easeOut",
+              ease: [0.22, 1, 0.36, 1],
             }}
-            className="lg:self-center"
+            className="relative lg:sticky lg:top-32"
           >
-            <div className="mb-4 flex items-center gap-3">
-              <span
-                className="
-                  h-px w-7
-                  bg-gradient-to-r
-                  from-[#c16cff]
-                  to-[#45caff]
-                "
-              />
-              <span
-                className="
-                  text-[10px] font-semibold
-                  uppercase tracking-[0.32em]
-                  text-white/65
-                "
-              >
-                Our Services
+            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-purple-400/20 bg-purple-500/[0.08] px-4 py-2">
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-purple-400 opacity-60" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-purple-400" />
+              </span>
+
+              <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-purple-200">
+                Digital Innovation Studio
               </span>
             </div>
 
-            <h2
-              className="
-                max-w-[460px]
-                text-[clamp(2.2rem,3.1vw,3.6rem)]
-                font-semibold leading-[1.1]
-                tracking-[-0.045em]
-              "
-            >
-              Complete Digital Solutions for a{" "}
-              <span
-                className="
-                  bg-gradient-to-r
-                  from-[#c16cff]
-                  via-[#a57aff]
-                  to-[#4ccaff]
-                  bg-clip-text text-transparent
-                "
-              >
-                Smarter Tomorrow.
+            <h2 className="max-w-[570px] text-[clamp(2.5rem,4vw,4.6rem)] font-bold leading-[1.06] tracking-[-0.055em]">
+              We Build
+              <span className="block">Digital</span>
+
+              <span className="block bg-gradient-to-r from-[#c27aff] via-[#9c6dff] to-[#53d5ff] bg-clip-text text-transparent">
+                Experiences
               </span>
+
+              <span className="block">That Matter.</span>
             </h2>
 
-            <p
-              className="
-                mt-6 max-w-[400px]
-                text-[14px] leading-[1.8]
-                text-white/65 sm:text-[15px]
-              "
-            >
-              From creative branding and websites to advanced
-              AI, automation and SaaS platforms, XTACH delivers
-              complete digital solutions to help businesses
-              innovate, scale and succeed.
+            <div className="mt-7 h-[2px] w-20 rounded-full bg-gradient-to-r from-purple-500 to-cyan-400" />
+
+            <p className="mt-7 max-w-[430px] text-[14px] leading-[1.9] text-slate-400 sm:text-[15px]">
+              From bold branding to intelligent AI-powered
+              platforms, we combine creativity, technology,
+              and strategy to turn ambitious ideas into
+              powerful digital solutions.
             </p>
 
             <motion.a
@@ -748,213 +520,162 @@ export default function Services() {
               whileHover={
                 reduceMotion
                   ? undefined
-                  : { y: -3, scale: 1.02 }
+                  : { scale: 1.035 }
               }
               whileTap={{ scale: 0.97 }}
-              className="
-                group mt-8 inline-flex min-h-[45px]
-                items-center gap-7 rounded-full
-                border border-white/40
-                bg-white/[0.025]
-                px-6 py-3 text-[12px]
-                font-medium text-white
-                transition-all
-                hover:border-[#a978ff]
-                hover:bg-[#a978ff]/10
-              "
+              className="group relative mt-9 inline-flex items-center gap-6 overflow-hidden rounded-full border border-purple-400/40 bg-gradient-to-r from-purple-600/20 to-blue-500/10 px-6 py-4 text-[13px] font-semibold text-white transition-all duration-300 hover:border-purple-300 hover:shadow-[0_0_35px_rgba(146,75,255,0.25)]"
             >
-              View All Services
-              <ArrowRight
-                size={16}
-                className="transition-transform group-hover:translate-x-1"
+              <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+
+              <span className="relative z-10">
+                Start Your Project
+              </span>
+
+              <ArrowUpRight
+                size={17}
+                className="relative z-10 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1"
               />
             </motion.a>
+
+           
           </motion.div>
 
-          {/* =====================================
-              RIGHT CAROUSEL
-          ===================================== */}
-
+          {/* Right carousel */}
           <div className="min-w-0">
-            {/* Slider header */}
             <div className="mb-5 flex items-center justify-between gap-4">
-              <div className="flex items-center gap-3">
-                <span className="h-2 w-2 rounded-full bg-[#a56dff] shadow-[0_0_14px_#a56dff]" />
-                <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-white/60">
-                  Explore Our Expertise
+              <div className="flex items-center gap-2">
+                <span className="h-2 w-2 rounded-full bg-purple-400 shadow-[0_0_12px_rgba(180,100,255,0.8)]" />
+
+                <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/50 sm:text-[11px]">
+                  Explore Our Services
                 </span>
               </div>
 
-              {/* Navigation arrows */}
               <div className="flex items-center gap-2">
                 <button
                   type="button"
-                  onClick={handlePrevious}
-                  aria-label="Previous service"
-                  className="
-                    group flex h-10 w-10
-                    items-center justify-center
-                    rounded-full border
-                    border-white/25
-                    bg-white/[0.04]
-                    transition-all duration-300
-                    hover:border-[#a978ff]
-                    hover:bg-[#a978ff]/20
-                    hover:shadow-[0_0_20px_rgba(169,120,255,0.25)]
-                  "
+                  onClick={() => {
+                    pauseTemporarily();
+                    previous();
+                  }}
+                  aria-label="Previous services"
+                  className="flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-white/[0.04] text-white transition-all duration-300 hover:border-purple-400 hover:bg-purple-500/20"
                 >
-                  <ArrowLeft
-                    size={17}
-                    className="transition-transform group-hover:-translate-x-1"
-                  />
+                  <ArrowLeft size={18} />
                 </button>
 
                 <button
                   type="button"
-                  onClick={handleNext}
-                  aria-label="Next service"
-                  className="
-                    group flex h-10 w-10
-                    items-center justify-center
-                    rounded-full border
-                    border-[#a978ff]/60
-                    bg-[#a978ff]/15
-                    transition-all duration-300
-                    hover:bg-[#a978ff]
-                    hover:shadow-[0_0_22px_rgba(169,120,255,0.4)]
-                  "
+                  onClick={() => {
+                    pauseTemporarily();
+                    next();
+                  }}
+                  aria-label="Next services"
+                  className="flex h-11 w-11 items-center justify-center rounded-full border border-purple-400/50 bg-purple-500/15 text-white transition-all duration-300 hover:bg-purple-500 hover:shadow-[0_0_25px_rgba(150,75,255,0.35)]"
                 >
-                  <ArrowRight
-                    size={17}
-                    className="transition-transform group-hover:translate-x-1"
-                  />
+                  <ArrowRight size={18} />
                 </button>
               </div>
             </div>
 
-            {/* Slider viewport */}
             <div
-              className="relative"
-              onMouseEnter={() => setIsPaused(true)}
-              onMouseLeave={() => setIsPaused(false)}
-              onFocusCapture={() => setIsPaused(true)}
+              ref={sliderRef}
+              onScroll={handleScroll}
+              onMouseEnter={() => setPaused(true)}
+              onMouseLeave={() => setPaused(false)}
+              onFocusCapture={() => setPaused(true)}
               onBlurCapture={(event) => {
                 if (
                   !event.currentTarget.contains(
                     event.relatedTarget as Node | null
                   )
                 ) {
-                  setIsPaused(false);
+                  setPaused(false);
                 }
               }}
+              onPointerDown={pauseTemporarily}
               onTouchStart={pauseTemporarily}
+              className="relative flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:gap-5"
+              style={{ scrollPaddingLeft: 0 }}
+              aria-label="XTACH services carousel"
             >
-              <div
-                ref={sliderRef}
-                onScroll={handleScroll}
-                className="
-                  flex snap-x snap-mandatory
-                  gap-4 overflow-x-auto
-                  scroll-smooth
-                  [scrollbar-width:none]
-                  [&::-webkit-scrollbar]:hidden
-                "
-              >
-                {services.map((service, index) => (
-                  <div
-                    key={service.number}
-                    data-service-card
-                    className="
-                      min-w-0 shrink-0 snap-start
-                      basis-[85%]
-                      sm:basis-[calc((100%-16px)/2)]
-                      xl:basis-[calc((100%-32px)/3)]
-                    "
-                  >
-                    <ServiceCard
-                      service={service}
-                      index={index}
-                    />
-                  </div>
-                ))}
-              </div>
-
-              {/* Right-edge gradient */}
-              <div
-                aria-hidden="true"
-                className="
-                  pointer-events-none absolute
-                  inset-y-0 right-0 w-10
-                  bg-gradient-to-l
-                  from-[#030817]/70
-                  to-transparent
-                "
-              />
+              {services.map((service, index) => (
+                <div
+                  key={service.number}
+                  className="w-full min-w-0 shrink-0 snap-start sm:w-[calc((100%-1.25rem)/2)] lg:w-[calc((100%-2.5rem)/3)]"
+                >
+                  <ServiceCard
+                    service={service}
+                    index={index}
+                  />
+                </div>
+              ))}
             </div>
 
-            {/* Progress and pagination */}
-            <div className="mt-7 flex flex-wrap items-center justify-between gap-4">
-              <div className="flex items-center gap-1.5">
-                {services.map((service, index) => (
-                  <button
-                    key={service.number}
-                    type="button"
-                    onClick={() => {
-                      pauseTemporarily();
-                      scrollToIndex(index);
-                    }}
-                    aria-label={`Go to service ${index + 1}: ${service.title}`}
-                    aria-current={activeIndex === index ? "true" : undefined}
-                    className="flex h-8 items-center justify-center px-0.5"
-                  >
-                    <span
-                      className={`
-                        block h-[3px] rounded-full
-                        transition-all duration-500
-                        ${
-                          activeIndex === index
-                            ? "w-7 bg-gradient-to-r from-[#bd6cff] to-[#38caff]"
-                            : "w-3 bg-white/20 hover:bg-white/50"
-                        }
-                      `}
+            {/* Carousel progress */}
+            <div className="mt-7 flex items-center justify-between gap-4">
+              <div className="flex flex-wrap items-center gap-2">
+                {Array.from(
+                  { length: maxIndex + 1 },
+                  (_, index) => (
+                    <button
+                      key={index}
+                      type="button"
+                      onClick={() => {
+                        pauseTemporarily();
+                        scrollToIndex(index);
+                      }}
+                      aria-label={`Go to service slide ${index + 1}`}
+                      aria-current={
+                        activeIndex === index
+                          ? "true"
+                          : undefined
+                      }
+                      className={`h-[4px] rounded-full transition-all duration-500 ${
+                        activeIndex === index
+                          ? "w-9 bg-gradient-to-r from-purple-500 to-cyan-400 shadow-[0_0_12px_rgba(160,90,255,0.6)]"
+                          : "w-4 bg-white/20 hover:bg-white/40"
+                      }`}
                     />
-                  </button>
-                ))}
+                  )
+                )}
               </div>
 
-              <div className="flex items-center gap-2 text-[12px] font-medium">
-                <span className="text-[#b77cff]">
+              <div className="flex shrink-0 items-center gap-2 text-[12px] font-medium tracking-wider">
+                <span className="text-purple-300">
                   {String(activeIndex + 1).padStart(2, "0")}
                 </span>
+
                 <span className="text-white/30">/</span>
-                <span className="text-white/55">
-                  {String(services.length).padStart(2, "0")}
+
+                <span className="text-white/60">
+                  {String(total).padStart(2, "0")}
                 </span>
-                <ChevronRight
+
+                <MoveUpRight
                   size={14}
-                  className="ml-1 text-white/35"
+                  className="ml-1 text-white/40"
                 />
               </div>
             </div>
 
-            <p className="mt-2 text-[11px] text-white/35">
-              Swipe or use the arrows to explore our services.
+            <p className="mt-5 text-[11px] text-white/35">
+              Swipe or use the arrows to explore our expertise.
             </p>
           </div>
         </div>
-      </div>
 
-      {/* Bottom separator */}
-      <div
-        className="
-          pointer-events-none absolute
-          inset-x-0 bottom-0 h-px
-          bg-gradient-to-r
-          from-transparent
-          via-[#986bff]/40
-          to-transparent
-        "
-      />
+        {/* Bottom decorative divider */}
+        <div className="mt-20 flex items-center gap-4 sm:mt-24">
+          <div className="h-px flex-1 bg-gradient-to-r from-transparent via-purple-500/25 to-transparent" />
+
+          <span className="text-[10px] font-semibold uppercase tracking-[0.25em] text-white/25">
+            Imagine · Innovate · Inspire
+          </span>
+
+          <div className="h-px flex-1 bg-gradient-to-r from-transparent via-cyan-500/25 to-transparent" />
+        </div>
+      </div>
     </section>
   );
 }
