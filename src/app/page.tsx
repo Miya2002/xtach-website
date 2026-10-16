@@ -5,6 +5,7 @@ import Services from "@/components/Services";
 import About from "@/components/About";
 import Process from "@/components/Process";
 import Contact from "@/components/Contact";
+import FooterCTA from "@/components/FooterCTA";
 import Footer from "@/components/Footer";
 
 export default function Home() {
@@ -16,7 +17,7 @@ export default function Home() {
       <About />
        <Process />
        <Contact />
-
+      <FooterCTA />
        <Footer />
     </main>
   );
