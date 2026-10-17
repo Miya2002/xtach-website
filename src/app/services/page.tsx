@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 
 import Navbar from "@/components/Navbar";
 import ServicesHero from "@/components/services/ServicesHero";
+import ServicesOverview from "@/components/services/ServicesOverview";
+import ServicesTechnologies from "@/components/services/ServicesTechnologies";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
@@ -17,7 +19,8 @@ export default function ServicesPage() {
       <Navbar />
 
       <ServicesHero />
-
+      <ServicesOverview />
+<ServicesTechnologies />
       <Footer />
     </main>
   );

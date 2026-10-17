@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 
 import Navbar from "@/components/Navbar";
 import BlogHero from "@/components/blog/BlogHero";
+import BlogJournal from "@/components/blog/BlogJournal";
+import Process from "@/components/Process";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
@@ -17,7 +19,8 @@ export default function BlogPage() {
       <Navbar />
 
       <BlogHero />
-
+ <BlogJournal />
+ <Process />
       <Footer />
     </main>
   );

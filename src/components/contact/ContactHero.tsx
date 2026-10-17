@@ -1,234 +1,463 @@
 
 "use client";
 
-import Link from "next/link";
+import { useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import {
   ArrowRight,
-  ArrowUpRight,
-  MessageSquare,
-  Sparkles,
-  Send,
   Mail,
-  Globe2,
+  Phone,
+  MapPin,
+  MessageCircle,
+  Copy,
+  Check,
 } from "lucide-react";
+
+const CONTACT = {
+  email: "hello@xtach.com",
+  phone: "",
+  whatsapp: "",
+  address: "",
+  mapsUrl: "",
+};
+
+// Add your actual contact details above.
+// WhatsApp format: country code + number, without + or spaces.
+
+const ease = [0.22, 1, 0.36, 1] as const;
+
+type CardType = "email" | "phone" | "office";
+
+const cards = [
+  {
+    id: "email" as CardType,
+    title: "Email Our Team",
+    description:
+      "For general inquiries, project details, or partnership opportunities.",
+    Icon: Mail,
+    color: "cyan",
+  },
+  {
+    id: "phone" as CardType,
+    title: "Call or WhatsApp",
+    description:
+      "Speak directly with our team for immediate assistance.",
+    Icon: Phone,
+    color: "purple",
+  },
+  {
+    id: "office" as CardType,
+    title: "Visit Our Office",
+    description:
+      "We'd love to meet you in person at our headquarters.",
+    Icon: MapPin,
+    color: "violet",
+  },
+];
+
+function EnergyEffect({ color }: { color: string }) {
+  const reduceMotion = useReducedMotion();
+
+  return (
+    <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-[13px]">
+      {/* Atmospheric glow */}
+      <div
+        className={`absolute -bottom-16 -left-14 h-44 w-44 rounded-full blur-[35px] ${
+          color === "cyan"
+            ? "bg-fuchsia-600/35"
+            : "bg-violet-600/40"
+        }`}
+      />
+
+      <div className="absolute -bottom-12 left-10 h-24 w-32 rounded-full bg-fuchsia-500/15 blur-[28px]" />
+
+      {/* Electrical rays */}
+      <svg
+        viewBox="0 0 400 210"
+        preserveAspectRatio="none"
+        className="absolute inset-0 h-full w-full opacity-75"
+        aria-hidden="true"
+      >
+        <defs>
+          <linearGradient id={`electric-${color}`} x1="0" y1="1" x2="1" y2="0">
+            <stop offset="0%" stopColor="#e879f9" stopOpacity="0.8" />
+            <stop offset="55%" stopColor="#8b5cf6" stopOpacity="0.35" />
+            <stop offset="100%" stopColor="#22d3ee" stopOpacity="0" />
+          </linearGradient>
+
+          <filter id={`glow-${color}`}>
+            <feGaussianBlur stdDeviation="3" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+
+        <path
+          d="M 5 210 Q 40 160 35 130 T 85 70"
+          fill="none"
+          stroke={`url(#electric-${color})`}
+          strokeWidth="1.1"
+          filter={`url(#glow-${color})`}
+        />
+
+        <path
+          d="M 18 210 Q 60 165 70 135 T 120 85"
+          fill="none"
+          stroke="#a855f7"
+          strokeOpacity="0.35"
+          strokeWidth="0.7"
+        />
+
+        <path
+          d="M 0 180 Q 40 140 55 175 T 135 125"
+          fill="none"
+          stroke="#22d3ee"
+          strokeOpacity="0.2"
+          strokeWidth="0.7"
+        />
+
+        <path
+          d="M 0 210 L 50 165 L 85 190 L 130 135"
+          fill="none"
+          stroke="#c084fc"
+          strokeOpacity="0.22"
+          strokeWidth="0.8"
+        />
+      </svg>
+
+      {/* Animated particles */}
+      {!reduceMotion &&
+        Array.from({ length: 5 }).map((_, i) => (
+          <motion.span
+            key={i}
+            className="absolute h-[2px] w-[2px] rounded-full bg-purple-300 shadow-[0_0_8px_#c084fc]"
+            style={{
+              left: `${8 + i * 12}%`,
+              bottom: `${8 + (i % 3) * 13}%`,
+            }}
+            animate={{
+              opacity: [0.1, 1, 0.1],
+              y: [0, -13, 0],
+            }}
+            transition={{
+              duration: 2.5 + i * 0.5,
+              repeat: Infinity,
+              delay: i * 0.4,
+            }}
+          />
+        ))}
+    </div>
+  );
+}
+
+function ContactCard({
+  card,
+  index,
+}: {
+  card: (typeof cards)[number];
+  index: number;
+}) {
+  const reduceMotion = useReducedMotion();
+  const [copied, setCopied] = useState(false);
+
+  const isCyan = card.color === "cyan";
+
+  const phoneAvailable = Boolean(CONTACT.phone);
+  const whatsappAvailable = Boolean(CONTACT.whatsapp);
+  const locationAvailable = Boolean(CONTACT.address && CONTACT.mapsUrl);
+
+  async function copyEmail() {
+    try {
+      await navigator.clipboard.writeText(CONTACT.email);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1600);
+    } catch {
+      window.location.href = `mailto:${CONTACT.email}`;
+    }
+  }
+
+  return (
+    <motion.article
+      initial={reduceMotion ? false : { opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{
+        duration: 0.7,
+        delay: index * 0.12,
+        ease,
+      }}
+      whileHover={
+        reduceMotion
+          ? undefined
+          : { y: -5, transition: { duration: 0.3 } }
+      }
+      className="group relative min-w-0"
+    >
+      {/* Neon border */}
+      <div className="relative h-full min-h-[210px] rounded-[14px] bg-gradient-to-br from-cyan-400/70 via-purple-500/60 to-violet-600/35 p-[1px] shadow-[0_0_24px_rgba(101,48,191,0.07)] transition-shadow duration-500 group-hover:shadow-[0_0_35px_rgba(139,92,246,0.2)] sm:min-h-[205px] lg:min-h-[205px]">
+
+        <div className="relative h-full overflow-hidden rounded-[13px] bg-[#080b23]">
+          <EnergyEffect color={card.color} />
+
+          {/* Glass highlight */}
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#13113b]/70 via-transparent to-[#07132e]/60" />
+
+          {/* Vertical neon line */}
+          <div className="pointer-events-none absolute left-0 top-5 h-14 w-[2px] bg-gradient-to-b from-cyan-400 via-purple-500 to-transparent shadow-[0_0_15px_#a855f7]" />
+
+          {/* Main content: horizontal arrangement */}
+          <div className="relative z-10 flex h-full min-h-[208px] items-start gap-4 px-4 py-7 sm:px-5 lg:gap-4 lg:px-4 xl:gap-5 xl:px-5">
+
+            {/* Glowing icon */}
+            <div className="relative -mt-3 shrink-0">
+              <motion.div
+                animate={
+                  reduceMotion
+                    ? undefined
+                    : {
+                        boxShadow: isCyan
+                          ? [
+                              "0 0 14px rgba(6,182,212,.45),0 0 28px rgba(6,182,212,.18)",
+                              "0 0 24px rgba(6,182,212,.85),0 0 45px rgba(6,182,212,.4)",
+                              "0 0 14px rgba(6,182,212,.45),0 0 28px rgba(6,182,212,.18)",
+                            ]
+                          : [
+                              "0 0 14px rgba(168,85,247,.45),0 0 28px rgba(168,85,247,.18)",
+                              "0 0 24px rgba(168,85,247,.85),0 0 45px rgba(168,85,247,.4)",
+                              "0 0 14px rgba(168,85,247,.45),0 0 28px rgba(168,85,247,.18)",
+                            ],
+                      }
+                }
+                transition={{
+                  duration: 3.2,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: index * 0.5,
+                }}
+                className={`flex h-[62px] w-[62px] items-center justify-center rounded-full border ${
+                  isCyan
+                    ? "border-cyan-300 bg-cyan-500/15"
+                    : "border-fuchsia-300 bg-purple-600/20"
+                } sm:h-[68px] sm:w-[68px] lg:h-[60px] lg:w-[60px] xl:h-[70px] xl:w-[70px]`}
+              >
+                <card.Icon
+                  size={29}
+                  strokeWidth={2.2}
+                  className={`${
+                    isCyan ? "text-cyan-100" : "text-white"
+                  } drop-shadow-[0_0_10px_rgba(192,132,252,0.85)]`}
+                />
+              </motion.div>
+
+              <motion.div
+                animate={
+                  reduceMotion ? undefined : { rotate: 360 }
+                }
+                transition={{
+                  duration: 18,
+                  repeat: Infinity,
+                  ease: "linear",
+                }}
+                className={`pointer-events-none absolute -inset-[7px] rounded-full border border-dashed ${
+                  isCyan
+                    ? "border-cyan-400/25"
+                    : "border-purple-400/25"
+                }`}
+              />
+            </div>
+
+            {/* Right-side content */}
+            <div className="flex min-w-0 flex-1 flex-col">
+              <h3 className="text-[14px] font-semibold tracking-[-0.02em] text-white sm:text-[15px] lg:text-[13px] xl:text-[15px]">
+                {card.title}
+              </h3>
+
+              <p className="mt-2 min-h-[42px] text-[11px] leading-[1.65] text-slate-300/85 sm:text-[12px] lg:text-[11px] xl:text-[12px]">
+                {card.description}
+              </p>
+
+              {/* Contact detail */}
+              <div className="mt-4 flex min-h-[32px] items-center gap-2">
+                {card.id === "email" && (
+                  <>
+                    <Mail size={14} className="shrink-0 text-purple-300" />
+                    <a
+                      href={`mailto:${CONTACT.email}`}
+                      className="min-w-0 truncate text-[11px] font-semibold text-cyan-300 hover:text-white sm:text-[12px]"
+                    >
+                      {CONTACT.email}
+                    </a>
+                    <button
+                      onClick={copyEmail}
+                      type="button"
+                      aria-label="Copy email"
+                      className="shrink-0 rounded p-1 text-slate-400 transition-colors hover:text-white"
+                    >
+                      {copied ? <Check size={13} /> : <Copy size={13} />}
+                    </button>
+                  </>
+                )}
+
+                {card.id === "phone" && (
+                  phoneAvailable ? (
+                    <a
+                      href={`tel:${CONTACT.phone.replace(/[^\d+]/g, "")}`}
+                      className="flex items-center gap-2 text-[11px] text-slate-200 hover:text-white sm:text-[12px]"
+                    >
+                      <Phone size={14} className="text-purple-300" />
+                      {CONTACT.phone}
+                    </a>
+                  ) : (
+                    <span className="text-[11px] text-slate-400">
+                      Let's discuss your project
+                    </span>
+                  )
+                )}
+
+                {card.id === "office" && (
+                  <div className="flex items-start gap-2 text-[11px] leading-relaxed text-slate-200 sm:text-[12px]">
+                    <MapPin
+                      size={14}
+                      className="mt-0.5 shrink-0 text-purple-300"
+                    />
+                    <span>
+                      {CONTACT.address || "Office visits by appointment"}
+                    </span>
+                  </div>
+                )}
+              </div>
+
+              {/* CTA */}
+              <div className="mt-4">
+                {card.id === "email" && (
+                  <a
+                    href={`mailto:${CONTACT.email}`}
+                    className="inline-flex items-center gap-2 text-[11px] font-semibold text-cyan-300 transition-colors hover:text-white sm:text-[12px]"
+                  >
+                    Send an Email
+                    <ArrowRight
+                      size={14}
+                      className="transition-transform group-hover:translate-x-1"
+                    />
+                  </a>
+                )}
+
+                {card.id === "phone" && (
+                  <a
+                    href={
+                      whatsappAvailable
+                        ? `https://wa.me/${CONTACT.whatsapp}`
+                        : `mailto:${CONTACT.email}?subject=Project%20Consultation`
+                    }
+                    target={whatsappAvailable ? "_blank" : undefined}
+                    rel={whatsappAvailable ? "noopener noreferrer" : undefined}
+                    className="inline-flex items-center gap-2 text-[11px] font-semibold text-cyan-300 transition-colors hover:text-white sm:text-[12px]"
+                  >
+                    {whatsappAvailable && (
+                      <MessageCircle size={14} className="text-green-400" />
+                    )}
+                    {whatsappAvailable
+                      ? "Chat on WhatsApp"
+                      : "Request a Consultation"}
+                    <ArrowRight
+                      size={14}
+                      className="transition-transform group-hover:translate-x-1"
+                    />
+                  </a>
+                )}
+
+                {card.id === "office" && (
+                  <a
+                    href={
+                      locationAvailable
+                        ? CONTACT.mapsUrl
+                        : `mailto:${CONTACT.email}?subject=Office%20Visit`
+                    }
+                    target={locationAvailable ? "_blank" : undefined}
+                    rel={locationAvailable ? "noopener noreferrer" : undefined}
+                    className="inline-flex items-center gap-2 text-[11px] font-semibold text-cyan-300 transition-colors hover:text-white sm:text-[12px]"
+                  >
+                    {locationAvailable
+                      ? "Get Directions"
+                      : "Arrange a Visit"}
+                    <ArrowRight
+                      size={14}
+                      className="transition-transform group-hover:translate-x-1"
+                    />
+                  </a>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </motion.article>
+  );
+}
 
 export default function ContactHero() {
   const reduceMotion = useReducedMotion();
 
   return (
     <section
-      id="contact"
-      aria-labelledby="contact-heading"
-      className="relative isolate flex min-h-[calc(100svh-100px)] items-center justify-center overflow-hidden bg-[#030717] px-5 py-14 text-white sm:px-10 sm:py-16 lg:px-16"
+      id="contact-channels"
+      className="relative isolate overflow-hidden bg-[#030615] py-16 text-white sm:py-20 lg:py-24"
     >
-      {/* Futuristic background */}
-      <div className="pointer-events-none absolute inset-0 -z-20 bg-[radial-gradient(ellipse_at_50%_40%,rgba(120,55,230,0.22),transparent_55%),radial-gradient(ellipse_at_85%_75%,rgba(0,190,255,0.12),transparent_45%)]" />
+      {/* Dark futuristic background */}
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_15%_85%,rgba(73,24,144,0.18),transparent_45%),radial-gradient(ellipse_at_90%_25%,rgba(22,31,95,0.15),transparent_40%)]" />
 
-      {/* Grid texture */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 -z-10 opacity-[0.08]"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(160,120,255,0.5) 1px,transparent 1px),linear-gradient(90deg,rgba(160,120,255,0.5) 1px,transparent 1px)",
-          backgroundSize: "70px 70px",
-          maskImage:
-            "radial-gradient(ellipse at center,black,transparent 75%)",
-        }}
-      />
+      {/* Ambient glows */}
+      <div className="pointer-events-none absolute -left-40 top-1/3 h-80 w-80 rounded-full bg-cyan-600/5 blur-[100px]" />
+      <div className="pointer-events-none absolute -right-32 top-10 h-72 w-72 rounded-full bg-violet-600/10 blur-[90px]" />
 
-      {/* Animated purple glow */}
-      <motion.div
-        aria-hidden="true"
-        animate={
-          reduceMotion
-            ? undefined
-            : { x: [0, 30, 0], y: [0, -20, 0] }
-        }
-        transition={{
-          duration: 10,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-        className="pointer-events-none absolute -left-20 top-1/4 -z-10 h-72 w-72 rounded-full bg-purple-600/15 blur-[100px]"
-      />
+      {/* Heading */}
+      <div className="relative mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-10 xl:px-14">
 
-      {/* Animated cyan glow */}
-      <motion.div
-        aria-hidden="true"
-        animate={
-          reduceMotion
-            ? undefined
-            : { x: [0, -25, 0], y: [0, 25, 0] }
-        }
-        transition={{
-          duration: 12,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-        className="pointer-events-none absolute -right-20 bottom-1/4 -z-10 h-80 w-80 rounded-full bg-cyan-500/10 blur-[100px]"
-      />
-
-      {/* Floating icons */}
-      <motion.div
-        aria-hidden="true"
-        animate={
-          reduceMotion
-            ? undefined
-            : { y: [0, -12, 0] }
-        }
-        transition={{
-          duration: 5,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-        className="pointer-events-none absolute left-[12%] top-[18%] hidden rounded-2xl border border-purple-400/20 bg-purple-500/10 p-4 text-purple-300 backdrop-blur-md lg:block"
-      >
-        <Mail size={27} />
-      </motion.div>
-
-      <motion.div
-        aria-hidden="true"
-        animate={
-          reduceMotion
-            ? undefined
-            : { y: [0, 12, 0] }
-        }
-        transition={{
-          duration: 6,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-        className="pointer-events-none absolute right-[12%] top-[23%] hidden rounded-2xl border border-cyan-400/20 bg-cyan-500/10 p-4 text-cyan-300 backdrop-blur-md lg:block"
-      >
-        <Globe2 size={27} />
-      </motion.div>
-
-      <motion.div
-        aria-hidden="true"
-        animate={
-          reduceMotion
-            ? undefined
-            : { y: [0, -10, 0] }
-        }
-        transition={{
-          duration: 7,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-        className="pointer-events-none absolute bottom-[17%] right-[18%] hidden rounded-2xl border border-purple-400/20 bg-purple-500/10 p-4 text-purple-300 backdrop-blur-md xl:block"
-      >
-        <Send size={25} />
-      </motion.div>
-
-      {/* Main content */}
-      <motion.div
-        initial={
-          reduceMotion
-            ? false
-            : { opacity: 0, y: 25 }
-        }
-        animate={{ opacity: 1, y: 0 }}
-        transition={{
-          duration: 0.8,
-          ease: "easeOut",
-        }}
-        className="relative z-10 mx-auto w-full max-w-[850px] text-center"
-      >
-        {/* Eyebrow */}
-        <div className="mb-7 flex items-center justify-center gap-3">
-          <span className="h-px w-8 bg-gradient-to-r from-purple-500 to-cyan-400" />
-
-          <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-purple-200 sm:text-xs">
-            Connect With XTACH
-          </span>
-
-          <Sparkles
-            size={16}
-            className="text-purple-400"
-          />
-        </div>
-
-        {/* Main animated icon */}
-        <motion.div
-          animate={
-            reduceMotion
-              ? undefined
-              : { y: [0, -8, 0] }
-          }
-          transition={{
-            duration: 4,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          className="mx-auto mb-8 flex h-20 w-20 items-center justify-center rounded-[24px] border border-purple-400/30 bg-purple-500/10 shadow-[0_0_50px_rgba(140,70,255,0.2)] backdrop-blur-xl"
-        >
-          <MessageSquare
-            size={33}
-            className="text-purple-300"
-          />
-        </motion.div>
-
-        {/* Heading */}
-        <h1
-          id="contact-heading"
-          className="text-[clamp(2.6rem,6vw,5.5rem)] font-extrabold leading-[1.08] tracking-[-0.055em]"
-        >
-          Contact page in process
-          <br />
-
-         
-        </h1>
-
-        
-
-        {/* Status */}
-        <div className="mt-8 inline-flex items-center gap-3 rounded-full border border-purple-400/25 bg-[#10132c]/80 px-5 py-3 backdrop-blur-lg">
-          <span className="relative flex h-2.5 w-2.5">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-400 opacity-50" />
-            <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-cyan-400" />
-          </span>
-
-          <span className="text-xs font-semibold uppercase tracking-[0.15em] text-purple-100">
-            Contact Page Coming Soon
-          </span>
-        </div>
-
-        {/* Buttons */}
-        <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-          <Link
-            href="/"
-            className="group inline-flex min-h-[48px] items-center justify-center gap-4 rounded-full bg-gradient-to-r from-purple-600 to-blue-500 px-7 text-[13px] font-semibold shadow-[0_8px_30px_rgba(120,60,240,0.3)] transition-all hover:shadow-[0_8px_35px_rgba(120,60,240,0.5)]"
+        <div className="mx-auto mb-11 max-w-[760px] text-center sm:mb-12">
+          <motion.p
+            initial={reduceMotion ? false : { opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, ease }}
+            className="mb-3 text-[10px] font-bold uppercase tracking-[0.23em] text-purple-300"
           >
-            Back to Home
+            Other Ways to Reach Us
+          </motion.p>
 
-            <ArrowRight
-              size={17}
-              className="transition-transform group-hover:translate-x-1"
-            />
-          </Link>
-
-          <Link
-            href="/services"
-            className="group inline-flex min-h-[48px] items-center justify-center gap-4 rounded-full border border-white/25 bg-white/5 px-7 text-[13px] font-semibold backdrop-blur-md transition-colors hover:bg-white/10"
+          <motion.h1
+            initial={reduceMotion ? false : { opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, delay: 0.08, ease }}
+            className="text-[clamp(1.8rem,3vw,2.65rem)] font-bold tracking-[-0.045em] text-white"
           >
-            Explore Our Services
+            Our Contact Channels
+          </motion.h1>
 
-            <ArrowUpRight
-              size={17}
-              className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-            />
-          </Link>
+          <motion.p
+            initial={reduceMotion ? false : { opacity: 0, y: 14 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, delay: 0.15, ease }}
+            className="mt-2.5 text-[12px] leading-relaxed text-slate-400 sm:text-[13px]"
+          >
+            Prefer a different way to connect? Here are more ways to get in
+            touch with our team.
+          </motion.p>
         </div>
 
-        {/* Bottom accent */}
-        <div className="mx-auto mt-14 h-px w-40 bg-gradient-to-r from-transparent via-purple-400/60 to-transparent" />
+        {/* Cards */}
+        <div className="grid grid-cols-1 items-stretch gap-5 md:grid-cols-2 lg:grid-cols-3 lg:gap-4 xl:gap-6">
+          {cards.map((card, index) => (
+            <ContactCard key={card.id} card={card} index={index} />
+          ))}
+        </div>
+      </div>
 
-        <p className="mt-5 text-[11px] uppercase tracking-[0.2em] text-slate-500">
-          Redefining The Matrix
-        </p>
-      </motion.div>
+      {/* Bottom section border */}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-purple-500/30 to-transparent" />
     </section>
   );
 }
