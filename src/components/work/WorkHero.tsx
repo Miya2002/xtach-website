@@ -6,171 +6,145 @@ import { motion, useReducedMotion } from "motion/react";
 import {
   ArrowRight,
   ArrowUpRight,
-  BriefcaseBusiness,
-  Sparkles,
-  Layers3,
   Code2,
-  Rocket,
+  Layers3,
+  Globe2,
 } from "lucide-react";
 
+const ease = [0.22, 1, 0.36, 1] as const;
+
 export default function WorkHero() {
-  const reduceMotion = useReducedMotion();
+  const reduced = useReducedMotion();
+
+  const reveal = (delay: number) => ({
+    initial: reduced ? false : { opacity: 0, y: 24 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 0.8, delay, ease },
+  });
 
   return (
     <section
-      id="work"
-      className="relative isolate flex min-h-[calc(100svh-100px)] items-center justify-center overflow-hidden bg-[#030717] px-5 py-16 text-white sm:px-10 lg:px-16"
+      id="work-hero"
+      aria-labelledby="work-hero-title"
+      className="relative isolate flex min-h-[690px] items-center overflow-hidden bg-[#030615] text-white lg:min-h-[760px]"
     >
-      {/* Background */}
-      <div className="pointer-events-none absolute inset-0 -z-20 bg-[radial-gradient(ellipse_at_50%_40%,rgba(119,54,224,0.22),transparent_55%),radial-gradient(ellipse_at_80%_80%,rgba(30,165,255,0.12),transparent_45%)]" />
-
-      {/* Animated glow */}
+      {/* Cinematic image background */}
       <motion.div
-        aria-hidden="true"
-        animate={
-          reduceMotion
-            ? undefined
-            : { x: [0, 30, 0], y: [0, -20, 0] }
-        }
-        transition={{
-          duration: 10,
-          repeat: Infinity,
-          ease: "easeInOut",
+        initial={reduced ? false : { opacity: 0, scale: 1.05 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 1.5, ease }}
+        className="absolute inset-0 -z-20"
+        style={{
+          backgroundImage: "url('/images/work-galaxy-hero.png')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
         }}
-        className="pointer-events-none absolute -left-20 top-1/4 -z-10 h-72 w-72 rounded-full bg-purple-600/15 blur-[100px]"
       />
 
+      {/* Hide baked-in text from artwork on the left */}
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-r from-[#030615] via-[#030615]/95 to-[#030615]/25 lg:from-[#030615] lg:via-[#030615]/90 lg:to-transparent" />
+
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-[#030615]/80 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#030615] to-transparent" />
+
+      {/* Subtle animated ambient lighting */}
       <motion.div
-        aria-hidden="true"
         animate={
-          reduceMotion
+          reduced
             ? undefined
-            : { x: [0, -25, 0], y: [0, 20, 0] }
+            : {
+                opacity: [0.15, 0.35, 0.15],
+                scale: [1, 1.15, 1],
+              }
         }
         transition={{
-          duration: 12,
+          duration: 9,
           repeat: Infinity,
           ease: "easeInOut",
         }}
-        className="pointer-events-none absolute -right-20 bottom-1/4 -z-10 h-80 w-80 rounded-full bg-cyan-500/10 blur-[100px]"
+        className="pointer-events-none absolute right-[10%] top-[20%] h-64 w-64 rounded-full bg-purple-500/20 blur-[100px]"
       />
 
-      {/* Decorative floating icons */}
-      <motion.div
-        aria-hidden="true"
-        animate={reduceMotion ? undefined : { y: [0, -12, 0] }}
-        transition={{
-          duration: 5,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-        className="pointer-events-none absolute left-[12%] top-[18%] hidden rounded-2xl border border-purple-400/20 bg-purple-500/10 p-4 text-purple-300 backdrop-blur-md lg:block"
-      >
-        <Layers3 size={26} />
-      </motion.div>
-
-      <motion.div
-        aria-hidden="true"
-        animate={reduceMotion ? undefined : { y: [0, 12, 0] }}
-        transition={{
-          duration: 6,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-        className="pointer-events-none absolute right-[12%] top-[25%] hidden rounded-2xl border border-cyan-400/20 bg-cyan-500/10 p-4 text-cyan-300 backdrop-blur-md lg:block"
-      >
-        <Code2 size={26} />
-      </motion.div>
-
-      {/* Main content */}
-      <motion.div
-        initial={reduceMotion ? false : { opacity: 0, y: 25 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-        className="relative z-10 mx-auto w-full max-w-[850px] text-center"
-      >
-        {/* Eyebrow */}
-        <div className="mb-7 flex items-center justify-center gap-3">
-          <span className="h-px w-8 bg-gradient-to-r from-purple-500 to-cyan-400" />
-
-          <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-purple-200 sm:text-xs">
-            Our Portfolio
-          </span>
-
-          <Sparkles size={16} className="text-purple-400" />
-        </div>
-
-        {/* Main icon */}
-        <motion.div
-          animate={
-            reduceMotion
-              ? undefined
-              : { y: [0, -8, 0] }
-          }
-          transition={{
-            duration: 4,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          className="mx-auto mb-8 flex h-20 w-20 items-center justify-center rounded-[24px] border border-purple-400/30 bg-purple-500/10 shadow-[0_0_50px_rgba(140,70,255,0.2)] backdrop-blur-xl"
-        >
-          <BriefcaseBusiness size={33} className="text-purple-300" />
-        </motion.div>
-
-        {/* Heading */}
-        <h1 className="text-[clamp(2.6rem,6vw,5.5rem)] font-extrabold leading-[1.08] tracking-[-0.055em]">
-          Work Page in Progess
-          <br />
-          
-        </h1>
-
-        
-
-        {/* Status */}
-        <div className="mt-8 inline-flex items-center gap-3 rounded-full border border-purple-400/25 bg-[#10132c]/80 px-5 py-3 backdrop-blur-lg">
-          <span className="relative flex h-2.5 w-2.5">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-400 opacity-50" />
-            <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-cyan-400" />
-          </span>
-
-          <span className="text-xs font-semibold uppercase tracking-[0.15em] text-purple-100">
-            Portfolio Coming Soon
-          </span>
-        </div>
-
-        {/* Buttons */}
-        <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-          <Link
-            href="/"
-            className="group inline-flex min-h-[48px] items-center justify-center gap-4 rounded-full bg-gradient-to-r from-purple-600 to-blue-500 px-7 text-[13px] font-semibold shadow-[0_8px_30px_rgba(120,60,240,0.3)] transition-all hover:shadow-[0_8px_35px_rgba(120,60,240,0.5)]"
+      <div className="relative z-10 mx-auto w-full max-w-[1600px] px-5 pb-16 pt-36 sm:px-9 sm:pt-40 lg:px-12 lg:pb-20 lg:pt-40 xl:px-16">
+        <div className="max-w-[660px]">
+          <motion.div
+            {...reveal(0.05)}
+            className="mb-6 flex items-center gap-3"
           >
-            Explore XTACH
-            <ArrowRight
-              size={17}
-              className="transition-transform group-hover:translate-x-1"
-            />
-          </Link>
+            <span className="h-[2px] w-9 bg-gradient-to-r from-fuchsia-400 to-cyan-400" />
+            <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-purple-200 sm:text-[11px]">
+              Selected Work / XTACH
+            </span>
+          </motion.div>
 
-          <Link
-            href="/#contact"
-            className="group inline-flex min-h-[48px] items-center justify-center gap-4 rounded-full border border-white/25 bg-white/5 px-7 text-[13px] font-semibold backdrop-blur-md transition-colors hover:bg-white/10"
+          <motion.h1
+            {...reveal(0.15)}
+            id="work-hero-title"
+            className="text-[clamp(2.55rem,4.1vw,4.4rem)] font-bold leading-[1.1] tracking-[-0.055em]"
           >
-            Start a Project
-            <ArrowUpRight
-              size={17}
-              className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-            />
-          </Link>
-        </div>
+            Ideas Made
+            <br />
+            <span className="bg-gradient-to-r from-fuchsia-400 via-violet-400 to-cyan-400 bg-clip-text text-transparent">
+              Extraordinary.
+            </span>
+            <br />
+            Results Made Real.
+          </motion.h1>
 
-        {/* Bottom */}
-        <div className="mx-auto mt-14 h-px w-40 bg-gradient-to-r from-transparent via-purple-400/60 to-transparent" />
+          <motion.p
+            {...reveal(0.3)}
+            className="mt-7 max-w-[510px] text-[13px] leading-[1.9] text-slate-300 sm:text-[14px] lg:text-[15px]"
+          >
+            Explore a selection of digital experiences, distinctive
+            brands, and intelligent solutions. Discover how XTACH
+            combines thoughtful design with meaningful technology.
+          </motion.p>
 
-        <div className="mt-5 flex items-center justify-center gap-2 text-[11px] uppercase tracking-[0.2em] text-slate-500">
-          <Rocket size={13} />
-          Redefining The Matrix
+          <motion.div
+            {...reveal(0.42)}
+            className="mt-8 flex flex-wrap items-center gap-3"
+          >
+            <Link
+              href="#featured-work"
+              className="group inline-flex min-h-[49px] items-center justify-center gap-5 rounded-full bg-gradient-to-r from-purple-600 via-violet-500 to-cyan-500 px-7 text-[13px] font-semibold shadow-[0_12px_35px_rgba(116,58,237,0.3)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_18px_45px_rgba(116,58,237,0.45)]"
+            >
+              Explore Our Work
+              <ArrowRight
+                size={17}
+                className="transition-transform group-hover:translate-x-1"
+              />
+            </Link>
+
+            <Link
+              href="/contact"
+              className="group inline-flex min-h-[49px] items-center justify-center gap-3 rounded-full border border-purple-400/40 bg-[#090b22]/65 px-6 text-[13px] font-semibold backdrop-blur-md transition-all duration-300 hover:border-cyan-400/60 hover:bg-purple-500/15"
+            >
+              Start a Project
+              <ArrowUpRight size={16} className="text-purple-300" />
+            </Link>
+          </motion.div>
+
+          <motion.div
+            {...reveal(0.55)}
+            className="mt-11 flex flex-wrap items-center gap-x-7 gap-y-4 border-t border-white/15 pt-6"
+          >
+            <div className="flex items-center gap-2 text-[11px] text-slate-300">
+              <Code2 size={17} className="text-cyan-400" />
+              Web Experiences
+            </div>
+
+            <div className="flex items-center gap-2 text-[11px] text-slate-300">
+              <Layers3 size={17} className="text-purple-400" />
+              Brand & Design
+            </div>
+
+            <div className="flex items-center gap-2 text-[11px] text-slate-300">
+              <Globe2 size={17} className="text-fuchsia-400" />
+              Digital Innovation
+            </div>
+          </motion.div>
         </div>
-      </motion.div>
+      </div>
     </section>
   );
 }

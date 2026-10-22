@@ -244,10 +244,7 @@ function ArticleCard({
         {/* Image gradient */}
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#090e22]/55 via-transparent to-transparent" />
 
-        {/* Category badge */}
-        <span className="absolute bottom-3 left-3 rounded-full border border-purple-300/25 bg-[#171139]/85 px-3 py-1.5 text-[9px] font-bold uppercase tracking-[0.09em] text-purple-100 backdrop-blur-lg">
-          {article.category}
-        </span>
+        
 
         {/* Corner arrow */}
         <span className="absolute right-3 top-3 flex h-8 w-8 translate-y-1 items-center justify-center rounded-full border border-white/20 bg-[#090e22]/75 text-white opacity-0 backdrop-blur-md transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">

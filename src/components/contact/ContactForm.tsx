@@ -457,16 +457,7 @@ export default function ContactForm() {
                     </div>
                   </div>
 
-                  {/* Demo success */}
-                  {submitted && (
-                    <div
-                      role="status"
-                      className="mt-3 flex items-center gap-2 rounded-md border border-cyan-400/25 bg-cyan-400/10 px-3 py-2 text-[11px] text-cyan-200"
-                    >
-                      <CheckCircle2 size={14} />
-                      UI preview complete. No message was sent.
-                    </div>
-                  )}
+                 
 
                   {/* Button */}
                   <motion.button
@@ -487,11 +478,7 @@ export default function ContactForm() {
                     />
                   </motion.button>
 
-                  {/* Privacy */}
-                  <p className="mt-3 flex items-center justify-center gap-1.5 text-center text-[9px] leading-relaxed text-slate-400 sm:text-[10px]">
-                    <LockKeyhole size={11} className="shrink-0 text-purple-300" />
-                    UI preview only. No information is submitted.
-                  </p>
+                  
                 </form>
               </div>
             </div>

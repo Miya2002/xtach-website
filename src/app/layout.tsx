@@ -1,5 +1,6 @@
 
 import type { Metadata } from "next";
+import XTACHChatbot from "@/components/XTACHChatbot";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -54,6 +55,9 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         {children}
+
+        {/* XTACH Global Support Chatbot */}
+        <XTACHChatbot />
       </body>
     </html>
   );

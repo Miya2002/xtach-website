@@ -3,12 +3,15 @@ import type { Metadata } from "next";
 
 import Navbar from "@/components/Navbar";
 import WorkHero from "@/components/work/WorkHero";
+import RecentWork from "@/components/work/RecentWork";
+import WorkTestimonials from "@/components/work/WorkTestimonials";
+import TestimonialsSlider from "@/components/work/TestimonialsSlider";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "Our Work | XTACH",
   description:
-    "Discover XTACH's portfolio of creative projects, digital experiences, and innovative technology solutions.",
+    "Explore XTACH's creative projects, digital experiences, and innovative technology solutions.",
 };
 
 export default function WorkPage() {
@@ -17,6 +20,12 @@ export default function WorkPage() {
       <Navbar />
 
       <WorkHero />
+
+      <RecentWork />
+
+      <WorkTestimonials />
+
+      <TestimonialsSlider />
 
       <Footer />
     </main>

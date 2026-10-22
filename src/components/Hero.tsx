@@ -2,10 +2,12 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { motion, useReducedMotion } from "motion/react";
+import { ArrowRight, Play } from "lucide-react";
 
 const reveal = {
-  hidden: { opacity: 0, y: 18 },
+  hidden: { opacity: 0, y: 16 },
   visible: { opacity: 1, y: 0 },
 };
 
@@ -43,16 +45,11 @@ export default function Hero() {
     playVideo();
 
     video.addEventListener("loadeddata", playVideo);
-    video.addEventListener("canplay", playVideo);
-    document.addEventListener(
-      "visibilitychange",
-      handleVisibility
-    );
+    document.addEventListener("visibilitychange", handleVisibility);
     window.addEventListener("pageshow", playVideo);
 
     return () => {
       video.removeEventListener("loadeddata", playVideo);
-      video.removeEventListener("canplay", playVideo);
       document.removeEventListener(
         "visibilitychange",
         handleVisibility
@@ -66,15 +63,15 @@ export default function Hero() {
       id="home"
       aria-labelledby="hero-heading"
       className="
-        relative isolate flex w-full flex-col
-        min-h-[640px] overflow-hidden
+        relative isolate flex w-full
+        min-h-[640px] flex-col overflow-hidden
         bg-[#030717]
         sm:min-h-[680px]
-        lg:min-h-[650px]
-        xl:min-h-[690px]
+        lg:min-h-[680px]
+        xl:min-h-[720px]
       "
     >
-      {/* BACKGROUND VIDEO */}
+      {/* GALAXY VIDEO BACKGROUND */}
       <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_75%_40%,#29115d_0%,#0b1640_35%,#030717_78%)]" />
 
@@ -96,7 +93,7 @@ export default function Hero() {
           "
         >
           <source
-            src="/videos/xtach-hero222.mp4"
+            src="/videos/xtach-hero22222.mp4"
             type="video/mp4"
           />
         </video>
@@ -106,40 +103,33 @@ export default function Hero() {
         )}
       </div>
 
-      {/* MAIN DARK OVERLAY */}
+      {/* DARK OVERLAYS FOR TEXT READABILITY */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 z-[1] bg-[#020512]/25"
       />
 
-      {/* DARKNESS BEHIND LEFT TEXT */}
       <div
         aria-hidden="true"
         className="
           pointer-events-none absolute inset-0 z-[2]
           bg-gradient-to-r
-          from-[#020512]/75
-          via-[#020512]/35
-          to-transparent
-          lg:from-[#020512]/65
-          lg:via-[#020512]/25
+          from-[#020512]/80 via-[#020512]/35 to-transparent
+          lg:from-[#020512]/70 lg:via-[#020512]/20
         "
       />
 
-      {/* CINEMATIC SHADOW */}
       <div
         aria-hidden="true"
         className="
           pointer-events-none absolute inset-0 z-[2]
           bg-gradient-to-b
-          from-[#020512]/20
-          via-transparent
-          to-[#020512]/30
+          from-[#020512]/25 via-transparent to-[#020512]/30
         "
       />
 
-      {/* SOFT PURPLE AMBIENT GLOW */}
-      <motion.div
+      {/* SUBTLE AMBIENT GLOW */}
+      <div
         aria-hidden="true"
         className="
           pointer-events-none absolute -left-40
@@ -147,40 +137,26 @@ export default function Hero() {
           h-[350px] w-[350px]
           rounded-full bg-[#7442e8]/10 blur-[100px]
         "
-        animate={
-          reduceMotion
-            ? undefined
-            : {
-                opacity: [0.25, 0.45, 0.25],
-                scale: [1, 1.08, 1],
-              }
-        }
-        transition={{
-          duration: 10,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
       />
 
-      {/* HERO CONTENT */}
-      <div
-        className="
-          relative z-10 mx-auto flex w-full
-          max-w-[1440px] flex-1
-          items-start
-          px-5 pt-12 pb-20
-          sm:px-8 sm:pt-14
-          md:px-10
-          lg:px-12 lg:pt-16 lg:pb-20
-          xl:px-16
-        "
-      >
+      {/* HERO CONTENT - SPACED BELOW FIXED NAVBAR */}
+   <div
+  className="
+    relative z-10 mx-auto flex w-full
+    max-w-[1440px] flex-1 items-start
+    px-5 pt-[145px] pb-16
+    sm:px-8 sm:pt-[160px]
+    md:px-10 md:pt-[165px]
+    lg:px-12 lg:pt-[170px] lg:pb-20
+    xl:px-16
+  "
+>
         <motion.div
           initial={reduceMotion ? false : "hidden"}
           animate="visible"
           transition={{
-            staggerChildren: 0.12,
-            delayChildren: 0.15,
+            staggerChildren: 0.1,
+            delayChildren: 0.1,
           }}
           className="
             w-full max-w-[540px]
@@ -191,10 +167,7 @@ export default function Hero() {
           {/* EYEBROW */}
           <motion.div
             variants={reveal}
-            transition={{
-              duration: 0.65,
-              ease: "easeOut",
-            }}
+            transition={{ duration: 0.55 }}
             className="mb-4 flex items-center gap-3"
           >
             <span className="h-px w-7 shrink-0 bg-gradient-to-r from-[#b875ff] to-[#48baff]" />
@@ -202,8 +175,8 @@ export default function Hero() {
             <span
               className="
                 text-[10px] font-semibold uppercase
-                tracking-[0.23em] text-white/90
-                sm:text-[11px] sm:tracking-[0.3em]
+                tracking-[0.2em] text-white/90
+                sm:text-[11px] sm:tracking-[0.25em]
               "
             >
               Digital Innovation Company
@@ -214,10 +187,7 @@ export default function Hero() {
           <motion.h1
             id="hero-heading"
             variants={reveal}
-            transition={{
-              duration: 0.8,
-              ease: "easeOut",
-            }}
+            transition={{ duration: 0.7 }}
             className="
               text-[clamp(2.5rem,5.5vw,4.5rem)]
               font-bold leading-[1.08]
@@ -231,9 +201,7 @@ export default function Hero() {
             <span
               className="
                 bg-gradient-to-r
-                from-[#c063f6]
-                via-[#aa7dfd]
-                to-[#56d5ff]
+                from-[#c063f6] via-[#aa7dfd] to-[#56d5ff]
                 bg-clip-text text-transparent
               "
             >
@@ -249,90 +217,79 @@ export default function Hero() {
           {/* DESCRIPTION */}
           <motion.p
             variants={reveal}
-            transition={{
-              duration: 0.75,
-              ease: "easeOut",
-            }}
+            transition={{ duration: 0.65 }}
             className="
               mt-5 max-w-[480px]
-              text-[14px] leading-[1.7]
-              text-white/90
+              text-[14px] leading-[1.7] text-white/90
               sm:text-[15px]
             "
           >
-            XTACH crafts powerful digital products, AI
-            solutions and marketing strategies that help
-            businesses grow, innovate and lead in the
-            digital era.
+            XTACH crafts powerful digital products, AI solutions
+            and marketing strategies that help businesses grow,
+            innovate and lead in the digital era.
           </motion.p>
 
-          {/* ACTION BUTTONS */}
+          {/* BUTTONS */}
           <motion.div
             variants={reveal}
-            transition={{
-              duration: 0.75,
-              ease: "easeOut",
-            }}
+            transition={{ duration: 0.65 }}
             className="
               mt-7 flex flex-wrap items-center
               gap-4 sm:gap-6
             "
           >
-            {/* PRIMARY BUTTON */}
-            <motion.a
-              href="#services"
+            <motion.div
               whileHover={
                 reduceMotion
                   ? undefined
-                  : {
-                      y: -3,
-                      scale: 1.025,
-                      boxShadow:
-                        "0 12px 35px rgba(169,120,255,0.25)",
-                    }
+                  : { y: -2, scale: 1.02 }
               }
               whileTap={
                 reduceMotion
                   ? undefined
-                  : { scale: 0.97 }
+                  : { scale: 0.98 }
               }
-              className="
-                group inline-flex min-h-[46px]
-                items-center justify-center gap-5
-                rounded-full bg-white
-                px-6 py-3 text-[12px]
-                font-semibold text-[#0a0d20]
-                shadow-[0_8px_30px_rgba(255,255,255,0.12)]
-                transition-colors hover:bg-[#f0eaff]
-                sm:text-[13px]
-              "
             >
-              Explore Our Services
+              <Link
+                href="/services"
+                className="
+                  group inline-flex min-h-[46px]
+                  items-center justify-center gap-5
+                  rounded-full bg-white
+                  px-6 py-3
+                  text-[12px] font-semibold text-[#0a0d20]
+                  shadow-[0_8px_30px_rgba(255,255,255,0.12)]
+                  transition-colors hover:bg-[#f0eaff]
+                  sm:text-[13px]
+                "
+              >
+                Explore Our Services
 
-              <span className="text-lg leading-none transition-transform duration-300 group-hover:translate-x-1">
-                →
-              </span>
-            </motion.a>
+                <ArrowRight
+                  size={17}
+                  className="transition-transform duration-200 group-hover:translate-x-1"
+                />
+              </Link>
+            </motion.div>
 
-            {/* SHOWREEL BUTTON */}
             <motion.a
               href="#showreel"
               whileHover={
                 reduceMotion
                   ? undefined
-                  : { scale: 1.04 }
+                  : { scale: 1.03 }
               }
               whileTap={
                 reduceMotion
                   ? undefined
-                  : { scale: 0.97 }
+                  : { scale: 0.98 }
               }
               className="
                 group inline-flex min-h-[46px]
                 items-center gap-3
-                text-[12px] font-medium
-                text-white/90 transition-colors
-                hover:text-white sm:text-[13px]
+                text-[12px] font-medium text-white/90
+                transition-colors hover:text-white
+                sm:text-[13px]
               "
             >
               <span
@@ -340,24 +297,13 @@ export default function Hero() {
                   flex h-11 w-11 items-center
                   justify-center rounded-full
                   border border-white/60
-                  bg-white/[0.04]
-                  backdrop-blur-sm
+                  bg-white/[0.04] backdrop-blur-sm
                   transition-all duration-300
                   group-hover:border-[#b67cff]
                   group-hover:bg-[#b67cff]/20
-                  group-hover:shadow-[0_0_22px_rgba(175,100,255,0.35)]
                 "
               >
-                <svg
-                  viewBox="0 0 24 24"
-                  width="17"
-                  height="17"
-                  fill="currentColor"
-                  aria-hidden="true"
-                  className="ml-0.5"
-                >
-                  <path d="M8 5v14l11-7z" />
-                </svg>
+                <Play size={15} fill="currentColor" />
               </span>
 
               Watch Showreel
@@ -366,61 +312,6 @@ export default function Hero() {
         </motion.div>
       </div>
 
-      {/* SCROLL INDICATOR */}
-      <motion.a
-        href="#about"
-        initial={
-          reduceMotion
-            ? false
-            : { opacity: 0, y: 12 }
-        }
-        animate={{ opacity: 1, y: 0 }}
-        transition={{
-          delay: 1.1,
-          duration: 0.7,
-        }}
-        className="
-          absolute bottom-5 left-5 z-10
-          hidden items-center gap-3
-          text-white/65 transition-colors
-          hover:text-white
-          sm:left-8 md:flex
-          lg:bottom-7 lg:left-12
-          xl:left-16
-        "
-        aria-label="Scroll down to learn about XTACH"
-      >
-        <span
-          className="
-            relative flex h-9 w-[20px]
-            items-start justify-center
-            rounded-full border border-white/65
-            pt-[7px]
-          "
-        >
-          <motion.span
-            className="h-[6px] w-[3px] rounded-full bg-white"
-            animate={
-              reduceMotion
-                ? undefined
-                : {
-                    y: [0, 10, 0],
-                    opacity: [1, 0.35, 1],
-                  }
-            }
-            transition={{
-              duration: 1.8,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          />
-        </span>
-
-        <span className="text-[10px] font-semibold uppercase tracking-[0.14em]">
-          Scroll Down
-        </span>
-      </motion.a>
-
       {/* BOTTOM BORDER */}
       <div
         aria-hidden="true"
@@ -428,9 +319,7 @@ export default function Hero() {
           pointer-events-none absolute
           inset-x-0 bottom-0 z-10 h-px
           bg-gradient-to-r
-          from-transparent
-          via-[#9b66ff]/50
-          to-transparent
+          from-transparent via-[#9b66ff]/50 to-transparent
         "
       />
     </section>

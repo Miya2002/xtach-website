@@ -1,7 +1,6 @@
 
 "use client";
 
-import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import {
   ArrowRight,
@@ -41,66 +40,35 @@ const stats = [
 ];
 
 export default function AboutHero() {
-  const videoRef = useRef<HTMLVideoElement>(null);
   const reduceMotion = useReducedMotion();
-  const [videoFailed, setVideoFailed] = useState(false);
-
-  useEffect(() => {
-    const video = videoRef.current;
-
-    if (!video || reduceMotion || videoFailed) return;
-
-    video.muted = true;
-    video.play().catch(() => {
-      // The poster image remains visible.
-    });
-  }, [reduceMotion, videoFailed]);
 
   return (
     <section
       id="about-hero"
       aria-labelledby="about-hero-heading"
-      className="relative isolate flex min-h-[calc(100svh-80px)] flex-col overflow-hidden bg-[#030617] text-white lg:h-[calc(100svh-80px)] lg:min-h-[620px]"
+      className="relative isolate flex min-h-[100svh] flex-col overflow-hidden bg-[#030617] text-white"
     >
-      {/* BACKGROUND VIDEO */}
+      {/* STATIC HD BACKGROUND */}
       <div className="pointer-events-none absolute inset-0 -z-10">
         <div
           className="absolute inset-0 bg-cover bg-[65%_center] lg:bg-center"
           style={{
-            backgroundImage:
-              "url('/images/about/about-hero.png')",
+            backgroundImage: "url('/images/about/about-hero.png')",
           }}
         />
 
-        {!reduceMotion && !videoFailed && (
-          <video
-            ref={videoRef}
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="metadata"
-            poster="/images/about/about-hero.png"
-            onError={() => setVideoFailed(true)}
-            className="absolute inset-0 h-full w-full object-cover object-[65%_center] lg:object-center"
-          >
-            <source
-              src="/videos/about-hero.mp4"
-              type="video/mp4"
-            />
-          </video>
-        )}
-
-        {/* Dark left side for text */}
+        {/* Dark left gradient for readable text */}
         <div className="absolute inset-0 bg-gradient-to-r from-[#030617]/95 via-[#030617]/75 to-[#030617]/10" />
 
         {/* Subtle top and bottom fade */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#030617]/20 via-transparent to-[#030617]/80" />
       </div>
 
-      <div className="relative mx-auto flex w-full max-w-[1600px] flex-1 flex-col justify-between px-5 pb-5 pt-8 sm:px-8 sm:pb-7 lg:min-h-0 lg:px-12 lg:pb-7 lg:pt-9 xl:px-16">
-        {/* MAIN HERO CONTENT */}
-        <div className="flex flex-1 items-center py-5 lg:min-h-0 lg:py-3">
+      {/* MAIN CONTAINER */}
+      <div className="relative mx-auto flex w-full max-w-[1600px] flex-1 flex-col justify-between px-5 pb-6 pt-[95px] sm:px-8 sm:pt-[105px] md:pt-[110px] lg:px-12 lg:pb-7 lg:pt-[115px] xl:px-16 xl:pt-[120px]">
+
+        {/* HERO CONTENT */}
+        <div className="flex flex-1 items-center py-5 lg:py-6">
           <motion.div
             initial={
               reduceMotion ? false : { opacity: 0, y: 20 }
@@ -109,7 +77,7 @@ export default function AboutHero() {
             transition={{ duration: 0.7 }}
             className="w-full max-w-[530px]"
           >
-            {/* Section label */}
+            {/* SECTION LABEL */}
             <div className="mb-4 flex items-center gap-3">
               <span className="h-[2px] w-9 bg-gradient-to-r from-cyan-400 to-purple-500" />
 
@@ -123,7 +91,7 @@ export default function AboutHero() {
               />
             </div>
 
-            {/* Heading */}
+            {/* HEADING */}
             <h1
               id="about-hero-heading"
               className="text-[clamp(2.5rem,3.7vw,4rem)] font-extrabold leading-[1.08] tracking-[-0.05em]"
@@ -140,7 +108,7 @@ export default function AboutHero() {
               </span>
             </h1>
 
-            {/* Description */}
+            {/* DESCRIPTION */}
             <p className="mt-5 max-w-[480px] text-[13px] leading-[1.8] text-slate-300 sm:text-[14px] xl:text-[15px]">
               At XTACH, we blend creativity, technology, and
               strategy to build digital solutions that create
@@ -149,7 +117,7 @@ export default function AboutHero() {
               for a smarter, more connected future.
             </p>
 
-            {/* Buttons */}
+            {/* BUTTONS */}
             <div className="mt-6 flex flex-wrap items-center gap-3">
               <motion.a
                 href="#our-story"
@@ -188,7 +156,7 @@ export default function AboutHero() {
           </motion.div>
         </div>
 
-        {/* COMPACT STATS PANEL */}
+        {/* STATS PANEL */}
         <motion.div
           initial={
             reduceMotion ? false : { opacity: 0, y: 20 }
@@ -223,7 +191,7 @@ export default function AboutHero() {
                       : ""
                   }`}
                 >
-                  {/* Icon */}
+                  {/* STAT ICON */}
                   <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[13px] border border-purple-400/40 bg-purple-500/10">
                     <Icon
                       size={23}
@@ -232,7 +200,7 @@ export default function AboutHero() {
                     />
                   </div>
 
-                  {/* Stat content */}
+                  {/* STAT DETAILS */}
                   <div className="min-w-0">
                     <div className="bg-gradient-to-r from-[#ed6dff] via-[#c58cff] to-[#48cfff] bg-clip-text text-[27px] font-extrabold leading-none tracking-tight text-transparent xl:text-[30px]">
                       {stat.value}

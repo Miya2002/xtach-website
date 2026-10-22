@@ -28,81 +28,73 @@ import {
 const services = [
   {
     number: "01",
-    title: "Logo & Brand Design",
+    title: "Brand design and development",
     description: "Memorable identities that make your brand stand out.",
-    category: "CREATIVE",
-    image: "/images/services/logo-branding.jfif",
+    
+    image: "/images/services/brand-design.png",
     icon: Palette,
     color: "#bf78ff",
   },
+  
   {
     number: "02",
-    title: "Website Design & Development",
-    description: "Beautiful, fast and responsive websites built to perform.",
-    category: "DEVELOPMENT",
-    image: "/images/services/web-development.jfif",
-    icon: Code2,
-    color: "#39c9ff",
-  },
-  {
-    number: "03",
     title: "Application Development",
     description: "Powerful mobile and web apps for modern businesses.",
-    category: "DEVELOPMENT",
+   
     image: "/images/services/app-development.jfif",
     icon: Smartphone,
     color: "#bb7aff",
   },
   {
-    number: "04",
+    number: "03",
     title: "Digital Marketing",
     description: "Creative strategies that help your business grow online.",
-    category: "MARKETING",
+    
     image: "/images/services/digital-marketing.jfif",
     icon: Megaphone,
     color: "#f17ab9",
   },
   {
-    number: "05",
+    number: "04",
     title: "Portals & CRM Systems",
     description: "Smart platforms that streamline your business operations.",
-    category: "ENTERPRISE",
+    
     image: "/images/services/crm-portals.jfif",
     icon: Database,
     color: "#b679ff",
   },
   {
-    number: "06",
+    number: "05",
     title: "AI Model Development",
     description: "Custom AI models designed for intelligent business solutions.",
-    category: "ARTIFICIAL INTELLIGENCE",
+    
     image: "/images/services/ai-models.jfif",
     icon: BrainCircuit,
     color: "#3cd7f5",
   },
   {
-    number: "07",
+    number: "06",
     title: "AI Voice Overs",
     description: "Natural AI-powered voices for engaging digital content.",
-    category: "ARTIFICIAL INTELLIGENCE",
+    
     image: "/images/services/ai-voiceovers.jfif",
     icon: Mic,
     color: "#b579ff",
   },
   {
-    number: "08",
+    number: "07",
     title: "AI Automation",
     description: "Automate repetitive tasks and improve business efficiency.",
-    category: "AUTOMATION",
+    
     image: "/images/services/ai-automation.jfif",
     icon: Workflow,
     color: "#35cfff",
   },
   {
-    number: "09",
+    number: "08",
     title: "SaaS Development",
     description: "Scalable cloud software built for growing businesses.",
-    category: "CLOUD SOLUTIONS",
+    
     image: "/images/services/saas-development.jfif",
     icon: Cloud,
     color: "#b47aff",
@@ -154,20 +146,10 @@ function ServiceCard({ service }: { service: Service }) {
         </div>
 
         <span className="absolute right-4 top-4 rounded-full border border-white/15 bg-[#070b1d]/85 px-3 py-2 text-[11px] font-semibold tracking-wider text-white/80 backdrop-blur-md">
-          {service.number} / 09
+          {service.number} / 08
         </span>
 
-        <div className="absolute bottom-4 left-4">
-          <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-[#080c20]/85 px-3 py-2 text-[10px] font-semibold tracking-[0.12em] text-white/85 backdrop-blur-md">
-            <span
-              className="h-1.5 w-1.5 rounded-full"
-              style={{
-                backgroundColor: service.color,
-              }}
-            />
-            {service.category}
-          </span>
-        </div>
+       
       </div>
 
       {/* CARD CONTENT */}

@@ -4,7 +4,8 @@ import Hero from "@/components/Hero";
 import Services from "@/components/Services";
 import About from "@/components/About";
 import Process from "@/components/Process";
-import Contact from "@/components/Contact";
+
+import ContactForm from "@/components/contact/ContactForm";
 import FooterCTA from "@/components/FooterCTA";
 import Footer from "@/components/Footer";
 
@@ -16,7 +17,8 @@ export default function Home() {
       <Services />
       <About />
        <Process />
-       <Contact />
+       
+       <ContactForm />
       <FooterCTA />
        <Footer />
     </main>
