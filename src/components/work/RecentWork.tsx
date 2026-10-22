@@ -51,7 +51,7 @@ const projects: Project[] = [
     title: "Brand Identity Showcase",
     category: "Logos",
     description: "Creative brand identity and visual design.",
-    image: "/images/work/logo-2.jfif",
+    image: "/images/work/logo22.png",
   },
   {
     id: 2,
@@ -72,7 +72,7 @@ const projects: Project[] = [
     title: "Corporate Brand Identity",
     category: "Stationery",
     description: "Professional business stationery and branding.",
-    image: "/images/work/stationery-1.jfif",
+    image: "/images/work/stationery-1.png",
   },
   {
     id: 5,
@@ -93,14 +93,14 @@ const projects: Project[] = [
     title: "Visual Identity Concept",
     category: "Logos",
     description: "Memorable logo and identity design.",
-    image: "/images/work/logo-222.jfif",
+    image: "/images/work/logo-222.png",
   },
   {
     id: 8,
     title: "Business Website Experience",
     category: "Websites",
     description: "Modern and conversion-focused web experience.",
-    image: "/images/work/website-2.jfif",
+    image: "/images/work/website-2.png",
   },
   {
     id: 9,

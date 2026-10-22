@@ -82,7 +82,7 @@ export default function Navbar() {
           "
         >
           <Image
-            src="/images/xtach-navbar-logo1.png"
+            src="/images/xtach-navbar-logo11.png"
             alt="XTACH - Redefining The Matrix"
             width={300}
             height={110}

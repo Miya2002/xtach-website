@@ -36,7 +36,7 @@ const testimonials = [
       "XTACH understood our vision and transformed it into a beautiful digital experience. Their creativity, attention to detail, and dedication made the entire process exceptional.",
     name: "Client Name 01",
     role: "Brand Identity Project",
-    image: "/images/work/testimonials/client-1.png",
+    image: "/images/work/testimonials/client-1.PNG",
   },
   {
     id: 2,
@@ -44,7 +44,7 @@ const testimonials = [
       "The team brought fresh ideas, thoughtful design, and a professional approach to our project. The final experience was modern, intuitive, and aligned with our goals.",
     name: "Client Name 02",
     role: "Website Development Project",
-    image: "/images/work/testimonials/client-2.png",
+    image: "/images/work/testimonials/client-2.PNG",
   },
   {
     id: 3,
@@ -52,7 +52,7 @@ const testimonials = [
       "From the first conversation to the final delivery, the experience was collaborative and well organized. The team understood what we wanted to achieve.",
     name: "Client Name 03",
     role: "Digital Solutions Project",
-    image: "/images/work/testimonials/client-3.png",
+    image: "/images/work/testimonials/client-3.PNG",
   },
 ];
 
