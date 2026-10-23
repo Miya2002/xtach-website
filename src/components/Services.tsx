@@ -41,7 +41,7 @@ const services = [
     title: "Application Development",
     description: "Powerful mobile and web apps for modern businesses.",
    
-    image: "/images/services/app-development.jfif",
+    image: "/images/services/app-development1.png",
     icon: Smartphone,
     color: "#bb7aff",
   },
@@ -50,7 +50,7 @@ const services = [
     title: "Digital Marketing",
     description: "Creative strategies that help your business grow online.",
     
-    image: "/images/services/digital-marketing.jfif",
+    image: "/images/services/digital-marketing1.png",
     icon: Megaphone,
     color: "#f17ab9",
   },
@@ -59,7 +59,7 @@ const services = [
     title: "Portals & CRM Systems",
     description: "Smart platforms that streamline your business operations.",
     
-    image: "/images/services/crm-portals.jfif",
+    image: "/images/services/crm-portals1.png",
     icon: Database,
     color: "#b679ff",
   },
@@ -68,7 +68,7 @@ const services = [
     title: "AI Model Development",
     description: "Custom AI models designed for intelligent business solutions.",
     
-    image: "/images/services/ai-models.jfif",
+    image: "/images/services/ai-models1.png",
     icon: BrainCircuit,
     color: "#3cd7f5",
   },
@@ -77,7 +77,7 @@ const services = [
     title: "AI Voice Overs",
     description: "Natural AI-powered voices for engaging digital content.",
     
-    image: "/images/services/ai-voiceovers.jfif",
+    image: "/images/services/ai-voiceovers.png",
     icon: Mic,
     color: "#b579ff",
   },

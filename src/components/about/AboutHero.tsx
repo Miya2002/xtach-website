@@ -4,214 +4,392 @@
 import { motion, useReducedMotion } from "motion/react";
 import {
   ArrowRight,
-  Play,
+  ArrowUpRight,
   Sparkles,
   UsersRound,
   Star,
-  Settings,
+  Settings2,
   ChartNoAxesColumnIncreasing,
 } from "lucide-react";
+
+const ease = [0.22, 1, 0.36, 1] as const;
 
 const stats = [
   {
     value: "50+",
     label: "Projects Delivered",
-    description: "Turning ideas into digital success stories.",
     icon: UsersRound,
   },
   {
     value: "30+",
     label: "Happy Clients",
-    description: "Trusted by businesses across industries.",
     icon: Star,
   },
   {
     value: "5+",
     label: "Years of Experience",
-    description: "Building innovative solutions with impact.",
-    icon: Settings,
+    icon: Settings2,
   },
   {
     value: "100%",
     label: "Commitment to Quality",
-    description: "Driven by excellence in everything we do.",
     icon: ChartNoAxesColumnIncreasing,
   },
 ];
 
+const particles = Array.from({ length: 18 }, (_, i) => ({
+  left: `${(i * 37 + 13) % 100}%`,
+  top: `${(i * 23 + 9) % 85}%`,
+  delay: (i % 6) * 0.5,
+}));
+
+/* COMPACT NEON PORTAL */
+
+function NeonPortal({
+  reduced,
+}: {
+  reduced: boolean | null;
+}) {
+  return (
+    <div
+      aria-hidden="true"
+      className="pointer-events-none relative mx-auto h-[190px] w-full max-w-[920px] overflow-hidden sm:h-[220px] lg:h-[245px]"
+    >
+      {/* Ambient glow */}
+      <motion.div
+        className="absolute bottom-[-55px] left-1/2 h-[230px] w-[440px] -translate-x-1/2 rounded-full bg-violet-600/25 blur-[70px] sm:w-[560px]"
+        animate={
+          reduced
+            ? undefined
+            : {
+                opacity: [0.55, 0.9, 0.55],
+                scale: [1, 1.05, 1],
+              }
+        }
+        transition={{
+          duration: 6,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+      />
+
+      {/* Small particles */}
+      {particles.map((particle, index) => (
+        <motion.span
+          key={index}
+          className="absolute h-[1.5px] w-[1.5px] rounded-full bg-purple-200/70"
+          style={{
+            left: particle.left,
+            top: particle.top,
+          }}
+          animate={
+            reduced
+              ? undefined
+              : {
+                  opacity: [0.15, 0.8, 0.15],
+                  y: [0, -5, 0],
+                }
+          }
+          transition={{
+            duration: 4 + (index % 3),
+            delay: particle.delay,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+      ))}
+
+      {/* Portal SVG */}
+      <svg
+        viewBox="0 0 1000 260"
+        preserveAspectRatio="xMidYMax meet"
+        className="absolute inset-0 h-full w-full"
+        fill="none"
+      >
+        <defs>
+          <linearGradient id="about-portal-arc" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stopColor="#36D8FF" />
+            <stop offset="28%" stopColor="#985BFF" />
+            <stop offset="50%" stopColor="#F5CBFF" />
+            <stop offset="72%" stopColor="#A35EFF" />
+            <stop offset="100%" stopColor="#36D8FF" />
+          </linearGradient>
+
+          <linearGradient id="about-horizon" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stopColor="#A45AFF" stopOpacity="0" />
+            <stop offset="28%" stopColor="#985BFF" />
+            <stop offset="50%" stopColor="#F8E7FF" />
+            <stop offset="72%" stopColor="#985BFF" />
+            <stop offset="100%" stopColor="#A45AFF" stopOpacity="0" />
+          </linearGradient>
+
+          <radialGradient id="about-portal-fill">
+            <stop offset="0%" stopColor="#A35CFF" stopOpacity="0.4" />
+            <stop offset="65%" stopColor="#6A2FC5" stopOpacity="0.12" />
+            <stop offset="100%" stopColor="#080719" stopOpacity="0" />
+          </radialGradient>
+
+          <filter
+            id="about-portal-glow"
+            x="-100%"
+            y="-100%"
+            width="300%"
+            height="300%"
+          >
+            <feGaussianBlur stdDeviation="9" />
+          </filter>
+        </defs>
+
+        {/* Orbital lines */}
+        <path
+          d="M305 215 A195 195 0 0 1 695 215"
+          stroke="#A66CFF"
+          strokeWidth="1"
+          opacity="0.15"
+        />
+
+        <path
+          d="M340 215 A160 160 0 0 1 660 215"
+          stroke="#A66CFF"
+          strokeWidth="1"
+          opacity="0.18"
+        />
+
+        {/* Inner glow */}
+        <path
+          d="M405 215 A95 95 0 0 1 595 215 Z"
+          fill="url(#about-portal-fill)"
+        />
+
+        {/* Glowing outer arc */}
+        <path
+          d="M375 215 A125 125 0 0 1 625 215"
+          stroke="#A05CFF"
+          strokeWidth="23"
+          opacity="0.75"
+          filter="url(#about-portal-glow)"
+        />
+
+        <path
+          d="M375 215 A125 125 0 0 1 625 215"
+          stroke="url(#about-portal-arc)"
+          strokeWidth="8"
+          strokeLinecap="round"
+        />
+
+        {/* Inner rings */}
+        <path
+          d="M392 215 A108 108 0 0 1 608 215"
+          stroke="#E3BCFF"
+          strokeWidth="4"
+          opacity="0.9"
+        />
+
+        <path
+          d="M410 215 A90 90 0 0 1 590 215"
+          stroke="#9B60FF"
+          strokeWidth="2"
+          opacity="0.85"
+        />
+
+        {/* Horizon glow */}
+        <path
+          d="M120 215 H880"
+          stroke="#A05CFF"
+          strokeWidth="15"
+          opacity="0.6"
+          filter="url(#about-portal-glow)"
+        />
+
+        {/* Horizon line */}
+        <path
+          d="M120 215 H880"
+          stroke="url(#about-horizon)"
+          strokeWidth="2.5"
+        />
+
+        {/* Reflection */}
+        <ellipse
+          cx="500"
+          cy="235"
+          rx="160"
+          ry="18"
+          fill="#985BFF"
+          opacity="0.2"
+          filter="url(#about-portal-glow)"
+        />
+      </svg>
+    </div>
+  );
+}
+
+/* MAIN ABOUT HERO */
+
 export default function AboutHero() {
-  const reduceMotion = useReducedMotion();
+  const reduced = useReducedMotion();
+
+  const reveal = (delay = 0) => ({
+    initial: reduced ? false : { opacity: 0, y: 15 },
+    animate: { opacity: 1, y: 0 },
+    transition: {
+      duration: 0.65,
+      delay,
+      ease,
+    },
+  });
 
   return (
     <section
       id="about-hero"
       aria-labelledby="about-hero-heading"
-      className="relative isolate flex min-h-[100svh] flex-col overflow-hidden bg-[#030617] text-white"
+      className="relative isolate overflow-hidden bg-[#050719] text-white"
     >
-      {/* STATIC HD BACKGROUND */}
-      <div className="pointer-events-none absolute inset-0 -z-10">
+      {/* Background */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 -z-10"
+      >
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_65%,rgba(83,35,155,0.13),transparent_65%)]" />
+
         <div
-          className="absolute inset-0 bg-cover bg-[65%_center] lg:bg-center"
+          className="absolute inset-0 opacity-[0.14]"
           style={{
-            backgroundImage: "url('/images/about/about-hero.png')",
+            backgroundImage:
+              "radial-gradient(rgba(180,166,255,0.7) 0.7px,transparent 0.7px)",
+            backgroundSize: "90px 90px",
           }}
         />
-
-        {/* Dark left gradient for readable text */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#030617]/95 via-[#030617]/75 to-[#030617]/10" />
-
-        {/* Subtle top and bottom fade */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#030617]/20 via-transparent to-[#030617]/80" />
       </div>
 
-      {/* MAIN CONTAINER */}
-      <div className="relative mx-auto flex w-full max-w-[1600px] flex-1 flex-col justify-between px-5 pb-6 pt-[95px] sm:px-8 sm:pt-[105px] md:pt-[110px] lg:px-12 lg:pb-7 lg:pt-[115px] xl:px-16 xl:pt-[120px]">
-
-        {/* HERO CONTENT */}
-        <div className="flex flex-1 items-center py-5 lg:py-6">
+      <div className="relative z-10 mx-auto max-w-[1350px] px-5 pb-10 pt-[115px] sm:px-8 sm:pt-[125px] lg:px-12 lg:pt-[135px] xl:px-16">
+        {/* Centered content */}
+        <div className="mx-auto flex max-w-[850px] flex-col items-center text-center">
+          {/* Badge */}
           <motion.div
-            initial={
-              reduceMotion ? false : { opacity: 0, y: 20 }
-            }
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7 }}
-            className="w-full max-w-[530px]"
+            {...reveal(0)}
+            className="inline-flex items-center gap-2 rounded-full border border-purple-400/25 bg-[#11102B]/80 px-3.5 py-1.5"
           >
-            {/* SECTION LABEL */}
-            <div className="mb-4 flex items-center gap-3">
-              <span className="h-[2px] w-9 bg-gradient-to-r from-cyan-400 to-purple-500" />
+            <Sparkles
+              size={12}
+              className="text-purple-300"
+            />
 
-              <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/80 sm:text-[11px]">
-                About XTACH
-              </span>
+            <span className="text-[9px] font-semibold uppercase tracking-[0.13em] text-purple-100 sm:text-[10px]">
+              About XTACH · Redefining the Matrix
+            </span>
+          </motion.div>
 
-              <Sparkles
-                size={15}
-                className="text-purple-400"
-              />
-            </div>
+          {/* Heading */}
+          <motion.h1
+            {...reveal(0.1)}
+            id="about-hero-heading"
+            className="mt-5 max-w-[820px] text-[clamp(2rem,3.2vw,3.25rem)] font-extrabold leading-[1.13] tracking-[-0.045em]"
+          >
+            We Don&apos;t Just Build Digital.
+            <br />
+            <span className="bg-gradient-to-r from-fuchsia-400 via-violet-400 to-cyan-400 bg-clip-text text-transparent">
+              We Shape What&apos;s Next.
+            </span>
+          </motion.h1>
 
-            {/* HEADING */}
-            <h1
-              id="about-hero-heading"
-              className="text-[clamp(2.5rem,3.7vw,4rem)] font-extrabold leading-[1.08] tracking-[-0.05em]"
+          {/* Description */}
+          <motion.p
+            {...reveal(0.2)}
+            className="mt-4 max-w-[620px] text-[12px] leading-[1.8] text-slate-400 sm:text-[13px] lg:text-[14px]"
+          >
+            At XTACH, creativity meets technology to turn ambitious
+            ideas into meaningful digital experiences. We combine
+            strategy, design, and innovation to help brands grow,
+            evolve, and stand out in a connected world.
+          </motion.p>
+
+          {/* Buttons */}
+          <motion.div
+            {...reveal(0.3)}
+            className="mt-6 flex flex-wrap items-center justify-center gap-3"
+          >
+            <a
+              href="#our-story"
+              className="group inline-flex min-h-[42px] items-center justify-center gap-3 rounded-full bg-gradient-to-r from-purple-600 to-blue-500 px-5 text-[11px] font-semibold text-white shadow-[0_8px_25px_rgba(120,70,240,0.25)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_30px_rgba(120,70,240,0.4)] sm:text-[12px]"
             >
-              More Than
-              <br />
-              A Company.
-              <br />
+              Discover Our Story
 
-              <span className="bg-gradient-to-r from-[#ec65ff] via-[#b68aff] to-[#36d7ff] bg-clip-text text-transparent">
-                A Force for
-                <br />
-                What&apos;s Next.
-              </span>
-            </h1>
+              <ArrowRight
+                size={15}
+                className="transition-transform group-hover:translate-x-1"
+              />
+            </a>
 
-            {/* DESCRIPTION */}
-            <p className="mt-5 max-w-[480px] text-[13px] leading-[1.8] text-slate-300 sm:text-[14px] xl:text-[15px]">
-              At XTACH, we blend creativity, technology, and
-              strategy to build digital solutions that create
-              real impact. We&apos;re not just a service
-              provider — we&apos;re your innovation partner
-              for a smarter, more connected future.
-            </p>
+            <a
+              href="#our-journey"
+              className="group inline-flex min-h-[42px] items-center justify-center gap-2 rounded-full border border-purple-400/30 bg-[#10112D]/75 px-5 text-[11px] font-medium text-slate-200 transition-colors hover:border-cyan-400/50 hover:bg-purple-500/10 sm:text-[12px]"
+            >
+              Our Journey
 
-            {/* BUTTONS */}
-            <div className="mt-6 flex flex-wrap items-center gap-3">
-              <motion.a
-                href="#our-story"
-                whileHover={
-                  reduceMotion ? undefined : { y: -2 }
-                }
-                whileTap={
-                  reduceMotion
-                    ? undefined
-                    : { scale: 0.97 }
-                }
-                className="group inline-flex min-h-[44px] items-center justify-center gap-6 rounded-full border border-purple-400/50 bg-gradient-to-r from-[#a52bf5] to-[#348cff] px-6 text-[12px] font-bold text-white shadow-[0_0_25px_rgba(142,65,255,0.25)] transition-all hover:shadow-[0_0_35px_rgba(142,65,255,0.4)] sm:text-[13px]"
-              >
-                Our Story
-
-                <ArrowRight
-                  size={16}
-                  className="transition-transform group-hover:translate-x-1"
-                />
-              </motion.a>
-
-              <motion.a
-                href="#our-journey"
-                whileHover={
-                  reduceMotion ? undefined : { y: -2 }
-                }
-                className="group inline-flex min-h-[44px] items-center justify-center gap-3 rounded-full border border-white/30 bg-[#05091c]/60 px-4 text-[12px] font-semibold text-white backdrop-blur-md transition-colors hover:border-purple-400 hover:bg-purple-500/15 sm:text-[13px]"
-              >
-                <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/50">
-                  <Play size={13} className="ml-0.5" />
-                </span>
-
-                Watch Our Journey
-              </motion.a>
-            </div>
+              <ArrowUpRight
+                size={14}
+                className="text-cyan-400"
+              />
+            </a>
           </motion.div>
         </div>
 
-        {/* STATS PANEL */}
+        {/* Portal immediately after buttons */}
         <motion.div
-          initial={
-            reduceMotion ? false : { opacity: 0, y: 20 }
-          }
+          initial={reduced ? false : { opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            duration: 0.85,
+            delay: 0.25,
+            ease,
+          }}
+          className="mt-0"
+        >
+          <NeonPortal reduced={reduced} />
+        </motion.div>
+
+        {/* Compact stats panel */}
+        <motion.div
+          initial={reduced ? false : { opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.65 }}
-          className="relative z-10 w-full overflow-hidden rounded-[20px] border border-purple-400/20 bg-[#070b20]/85 shadow-[0_10px_40px_rgba(0,0,0,0.25)] backdrop-blur-xl"
+          transition={{ duration: 0.65, ease }}
+          className="relative mx-auto -mt-1 max-w-[1030px] overflow-hidden rounded-xl border border-white/10 bg-[#0C0D24]/90"
         >
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid grid-cols-2 lg:grid-cols-4">
             {stats.map((stat, index) => {
               const Icon = stat.icon;
 
               return (
                 <div
                   key={stat.label}
-                  className={`group flex min-w-0 items-start gap-3 px-4 py-4 transition-colors hover:bg-purple-500/[0.06] xl:px-5 ${
+                  className={`flex items-center gap-3 px-3 py-4 transition-colors duration-300 hover:bg-purple-500/[0.06] sm:px-5 ${
                     index % 2 === 1
-                      ? "sm:border-l sm:border-white/10"
+                      ? "border-l border-white/10"
                       : ""
                   } ${
                     index >= 2
-                      ? "sm:border-t sm:border-white/10 lg:border-t-0"
+                      ? "border-t border-white/10 lg:border-t-0"
                       : ""
                   } ${
                     index === 2
                       ? "lg:border-l lg:border-white/10"
                       : ""
-                  } ${
-                    index > 0
-                      ? "max-sm:border-t max-sm:border-white/10"
-                      : ""
                   }`}
                 >
-                  {/* STAT ICON */}
-                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[13px] border border-purple-400/40 bg-purple-500/10">
-                    <Icon
-                      size={23}
-                      strokeWidth={1.7}
-                      className="text-[#c86cff]"
-                    />
+                  {/* Icon */}
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-purple-400/20 bg-purple-500/10 text-purple-300">
+                    <Icon size={16} strokeWidth={1.8} />
                   </div>
 
-                  {/* STAT DETAILS */}
+                  {/* Text */}
                   <div className="min-w-0">
-                    <div className="bg-gradient-to-r from-[#ed6dff] via-[#c58cff] to-[#48cfff] bg-clip-text text-[27px] font-extrabold leading-none tracking-tight text-transparent xl:text-[30px]">
+                    <p className="bg-gradient-to-r from-fuchsia-300 to-blue-300 bg-clip-text text-[21px] font-bold leading-none text-transparent sm:text-[24px]">
                       {stat.value}
-                    </div>
+                    </p>
 
-                    <h3 className="mt-1.5 text-[11px] font-bold leading-snug text-white xl:text-[12px]">
+                    <p className="mt-1.5 text-[9px] font-medium leading-snug text-slate-300 sm:text-[10px]">
                       {stat.label}
-                    </h3>
-
-                    <p className="mt-1 text-[11px] leading-[1.5] text-slate-400">
-                      {stat.description}
                     </p>
                   </div>
                 </div>

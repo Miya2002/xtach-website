@@ -229,7 +229,7 @@ export default function Footer() {
               className="relative block h-[65px] w-[235px] max-w-full"
             >
               <Image
-                src="/images/xtach-navbar-logo1.png"
+                src="/images/xtach-navbar-logo11.png"
                 alt="XTACH - Redefining The Matrix"
                 fill
                 sizes="235px"
