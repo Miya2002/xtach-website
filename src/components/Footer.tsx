@@ -455,7 +455,7 @@ export default function Footer() {
             <span className="text-[11px] text-slate-500">
               Designed by :  
                <Link
-              href="/Condition"
+              href="https://www.tasmiyaportfolio.com/"
               className="text-[11px] text-slate-400 hover:text-cyan-300"
             >
                TA
